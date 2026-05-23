@@ -810,64 +810,37 @@
 
         <!-- Phase 3: QC & Review (Linguist Execution Protocol) -->
         <div id="screen-phase3" class="card" style="display: none;">
-            <h2>Phase 3: Quality Control & Document Audit</h2>
+            <h2>Phase 3: Tracking Work in Progress</h2>
             <p>
-                The translator has submitted their work. Under the **Linguist Execution Protocol**,
-                you must verify that the work was completed in the online Google Doc link, that no Machine Translation
-                (MT) was used,
-                and that all mandatory template header details are filled.
+                As a project reviewer, you need to ensure proper tracking and communication while the translation is ongoing.
             </p>
-            <p><strong>Auditing Task:</strong> Click on the rows that represent a **critical protocol violation** in
-                this submission snippet:</p>
-
-            <div class="doc-container">
-                <div class="doc-header-block">
-                    <div style="font-weight: bold; font-size: 1.2rem; text-align: center; margin-bottom: 0.5rem;">
-                        LINGUIST AUDIT REPORT</div>
-                    <div style="font-size: 0.9rem; text-align: center;">Project: LC-291-Spanish | Reviewer checklist
+            <div class="form-group">
+                <label>What is required to track while work is in progress?</label>
+                <div class="option-list">
+                    <div class="option-item" onclick="selectPhase3Option(0)" id="p3-opt-0">
+                        <i class="far fa-circle" id="p3-ico-0"></i>
+                        <span>To track progress of translator, add metadata, add ss of ost, and in notes comments need to be added.</span>
                     </div>
-                </div>
-
-                <div class="doc-row" onclick="toggleDocRow(1)" id="doc-row-1">
-                    <span style="font-weight: 700;">Row 1:</span>
-                    <div>
-                        <b>Linguist Workspace:</b> Work completed directly via Google Docs online link.
-                        No local files used.
+                    <div class="option-item" onclick="selectPhase3Option(1)" id="p3-opt-1">
+                        <i class="far fa-circle" id="p3-ico-1"></i>
+                        <span>Only check the final submission document and ignore intermediate progress.</span>
                     </div>
-                </div>
-
-                <div class="doc-row" onclick="toggleDocRow(2)" id="doc-row-2">
-                    <span style="font-weight: 700;">Row 2:</span>
-                    <div>
-                        <b>Translation Method:</b> Segment 5 used Google Translate to speed up phrasing.
-                        Linguist did not review context.
+                    <div class="option-item" onclick="selectPhase3Option(2)" id="p3-opt-2">
+                        <i class="far fa-circle" id="p3-ico-2"></i>
+                        <span>Email the translator every hour to ask for updates without logging anything.</span>
                     </div>
-                </div>
-
-                <div class="doc-row" onclick="toggleDocRow(3)" id="doc-row-3">
-                    <span style="font-weight: 700;">Row 3:</span>
-                    <div>
-                        <b>Video Summary:</b> A concise 3-line video summary is included in the header sheet.
-                    </div>
-                </div>
-
-                <div class="doc-row" onclick="toggleDocRow(4)" id="doc-row-4">
-                    <span style="font-weight: 700;">Row 4:</span>
-                    <div>
-                        <b>Submission Method:</b> Work was exported to a local `.docx` file and sent via email, leaving
-                        the online Google Doc blank.
+                    <div class="option-item" onclick="selectPhase3Option(3)" id="p3-opt-3">
+                        <i class="far fa-circle" id="p3-ico-3"></i>
+                        <span>Wait until the deadline to verify if metadata and OST screenshots are added.</span>
                     </div>
                 </div>
             </div>
 
-            <p style="font-size: 0.9rem; font-style: italic;">Hint: Multiple rows can contain violations. Click all that
-                apply.</p>
-
             <div class="feedback-box" id="phase3-feedback"></div>
 
             <div style="text-align: right; margin-top: 1.5rem;">
-                <button class="btn" id="btn-phase3-next" onclick="submitPhase3()">
-                    Submit Audit <i class="fas fa-check"></i>
+                <button class="btn" id="btn-phase3-next" onclick="submitPhase3()" disabled>
+                    Submit Answer <i class="fas fa-check"></i>
                 </button>
             </div>
         </div>
@@ -973,7 +946,7 @@
         let timerInterval = null;
         let p1Selected = null;
         let p2Selected = null;
-        let p3SelectedRows = [];
+        let p3Selected = null;
         let p4Selected = null;
         let finalScore = 0;
         let secondsLeft = 30; // 30 seconds
@@ -1176,17 +1149,23 @@
             btn.onclick = () => showPhase(3);
         }
 
-        // Phase 3 Row Toggle
-        function toggleDocRow(index) {
-            const row = document.getElementById(`doc-row-${index}`);
-            const pos = p3SelectedRows.indexOf(index);
-            if (pos === -1) {
-                p3SelectedRows.push(index);
-                row.classList.add('selected');
-            } else {
-                p3SelectedRows.splice(pos, 1);
-                row.classList.remove('selected');
+        // Phase 3 Option Select
+        function selectPhase3Option(index) {
+            p3Selected = index;
+            for (let i = 0; i < 4; i++) {
+                const opt = document.getElementById(`p3-opt-${i}`);
+                const ico = document.getElementById(`p3-ico-${i}`);
+                if (i === index) {
+                    opt.classList.add('selected');
+                    ico.classList.replace('far', 'fas');
+                    ico.classList.replace('fa-circle', 'fa-check-circle');
+                } else {
+                    opt.classList.remove('selected');
+                    ico.classList.replace('fas', 'far');
+                    ico.classList.replace('fa-check-circle', 'fa-circle');
+                }
             }
+            document.getElementById('btn-phase3-next').removeAttribute('disabled');
         }
 
         // Submit Phase 3
@@ -1194,36 +1173,20 @@
             const feedback = document.getElementById('phase3-feedback');
             feedback.style.display = 'block';
 
-            // Correct rows to check are 2 (MT usage) and 4 (offline document submission)
-            const isRow2Selected = p3SelectedRows.includes(2);
-            const isRow4Selected = p3SelectedRows.includes(4);
-            const isRow1Selected = p3SelectedRows.includes(1);
-            const isRow3Selected = p3SelectedRows.includes(3);
-
-            if (isRow2Selected && isRow4Selected && !isRow1Selected && !isRow3Selected) {
-                feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> AUDIT COMPLETE: 100% CORRECT</h4>
-                                      <p style="margin: 0.5rem 0 0 0;">Superb! You correctly identified both violations:
-                                      <br>1. Machine Translation (MT) is strictly prohibited.
-                                      <br>2. Translators must work directly on the Google Doc link provided (offline work is unacceptable).</p>`;
+            if (p3Selected === 0) {
+                feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
+                                      <p style="margin: 0.5rem 0 0 0;">Spot on! You must proactively track progress, manage metadata, and keep communication notes updated.</p>`;
                 finalScore += 25;
             } else {
-                let text = "<b>Missing/Incorrect flags:</b> You should have flagged only Row 2 and Row 4.";
-                if (isRow1Selected) text += "<br>- Row 1 is actually correct behavior.";
-                if (isRow3Selected) text += "<br>- Row 3 is actually correct behavior.";
-                if (!isRow2Selected) text += "<br>- You missed the prohibited Google Translate usage in Row 2.";
-                if (!isRow4Selected) text += "<br>- You missed the prohibited offline file submission in Row 4.";
-
-                feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> AUDIT FAILED</h4>
-                                      <p style="margin: 0.5rem 0 0 0;">${text}</p>`;
+                feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
+                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Waiting or ignoring progress tracking leads to delays and missed quality checks.</p>`;
             }
 
-            // Flag correct incorrect rows
-            for (let i = 1; i <= 4; i++) {
-                const row = document.getElementById(`doc-row-${i}`);
-                row.style.pointerEvents = 'none';
-                if (i === 2 || i === 4) {
-                    row.classList.add('flagged');
-                }
+            for (let i = 0; i < 4; i++) {
+                const opt = document.getElementById(`p3-opt-${i}`);
+                opt.style.pointerEvents = 'none';
+                if (i === 0) opt.classList.add('correct');
+                else if (i === p3Selected) opt.classList.add('incorrect');
             }
 
             const btn = document.getElementById('btn-phase3-next');
@@ -1332,12 +1295,12 @@
                 "Row 2 (Persian review - Incomplete/Incorrect)",
                 "Row 3 (Bahasa - Violation/Incorrect)"
             ];
-            const p3Answers = {
-                1: "Row 1 (Google Docs online link - Correct)",
-                2: "Row 2 (Google Translate used - Violation) (Correct Flag)",
-                3: "Row 3 (Video summary - Correct)",
-                4: "Row 4 (Local .docx submission - Violation) (Correct Flag)"
-            };
+            const p3Answers = [
+                "To track progress of translator, add metadata, add ss of ost, and in notes comments need to be added. (Correct)",
+                "Only check the final submission document and ignore intermediate progress.",
+                "Email the translator every hour to ask for updates without logging anything.",
+                "Wait until the deadline to verify if metadata and OST screenshots are added."
+            ];
             const p4Answers = [
                 "Threatening/Rude tone",
                 "Constructive/Professional feedback (Correct)",
@@ -1346,7 +1309,7 @@
 
             const p1Text = p1Selected === null ? "Timed Out" : p1Answers[p1Selected];
             const p2Text = p2Selected === null ? "None selected" : p2Answers[p2Selected];
-            const p3Text = p3SelectedRows.length === 0 ? "None selected" : p3SelectedRows.map(r => p3Answers[r]).join(', ');
+            const p3Text = p3Selected === null ? "None selected" : p3Answers[p3Selected];
             const p4Text = p4Selected === null ? "None selected" : p4Answers[p4Selected];
 
             const detailedFeedback = `Phase 1 (Intake): Selected "${p1Text}" | Phase 2 (Tracking): Flagged "${p2Text}" | Phase 3 (QC): Flagged [${p3Text}] | Phase 4 (Feedback): Selected "${p4Text}"`;
