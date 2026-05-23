@@ -812,14 +812,16 @@
         <div id="screen-phase3" class="card" style="display: none;">
             <h2>Phase 3: Tracking Work in Progress</h2>
             <p>
-                As a project reviewer, you need to ensure proper tracking and communication while the translation is ongoing.
+                As a project reviewer, you need to ensure proper tracking and communication while the translation is
+                ongoing.
             </p>
             <div class="form-group">
                 <label>What is required to track while work is in progress?</label>
                 <div class="option-list">
                     <div class="option-item" onclick="selectPhase3Option(0)" id="p3-opt-0">
                         <i class="far fa-circle" id="p3-ico-0"></i>
-                        <span>To track progress of translator, add metadata, add ss of ost, and in notes comments need to be added.</span>
+                        <span>To track progress of translator, add metadata, add ss of ost, and and add comments in the
+                            speech for incmplete work or missing notes.</span>
                     </div>
                     <div class="option-item" onclick="selectPhase3Option(1)" id="p3-opt-1">
                         <i class="far fa-circle" id="p3-ico-1"></i>
@@ -845,32 +847,30 @@
             </div>
         </div>
 
-        <!-- Phase 4: Feedback formulation -->
+        <!-- Phase 4: Missing Portions -->
         <div id="screen-phase4" class="card" style="display: none;">
-            <h2>Phase 4: Rework & Professional Feedback</h2>
+            <h2>Phase 4: Issue Resolution</h2>
             <p>
-                When a linguist violates guidelines, you must formulate constructive, professional feedback.
-                Select the feedback draft that aligns best with **Lingo Chaps' core communication standards**:
+                What would you do if you notice when translator is missing out certain portion of speech while working on live doc?
             </p>
 
             <div class="form-group">
                 <div class="option-list">
                     <div class="option-item" onclick="selectPhase4Option(0)" id="p4-opt-0">
                         <i class="far fa-circle" id="p4-ico-0"></i>
-                        <span>"Your translation is terrible. You clearly used Google Translate. Do this manually or we
-                            will terminate your project."</span>
+                        <span>Comment out what is missing and inform senior so he can communicate with resource.</span>
                     </div>
                     <div class="option-item" onclick="selectPhase4Option(1)" id="p4-opt-1">
                         <i class="far fa-circle" id="p4-ico-1"></i>
-                        <span>"Hi there! Thanks for your submission. We noticed a couple of sections (e.g., segment 5)
-                            that resemble machine translation, and the work was submitted offline instead of the online
-                            doc. As per our standards, please migrate the translation to the Google Doc link, review the
-                            phrasing to ensure it is 100% human-verified, and add the video summary. Thank you for your
-                            support!"</span>
+                        <span>Fix the missing portion yourself without telling anyone to save time.</span>
                     </div>
                     <div class="option-item" onclick="selectPhase4Option(2)" id="p4-opt-2">
                         <i class="far fa-circle" id="p4-ico-2"></i>
-                        <span>"We accepted your file but please do it better next time."</span>
+                        <span>Ignore the missing portion since the translator might add it later before the deadline.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase4Option(3)" id="p4-opt-3">
+                        <i class="far fa-circle" id="p4-ico-3"></i>
+                        <span>Delete the document and ask the translator to start over from scratch.</span>
                     </div>
                 </div>
             </div>
@@ -879,7 +879,7 @@
 
             <div style="text-align: right; margin-top: 1.5rem;">
                 <button class="btn" id="btn-phase4-next" onclick="submitPhase4()" disabled>
-                    Submit Feedback <i class="fas fa-check"></i>
+                    Submit Answer <i class="fas fa-check"></i>
                 </button>
             </div>
         </div>
@@ -1197,7 +1197,7 @@
         // Phase 4 Option Select
         function selectPhase4Option(index) {
             p4Selected = index;
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 4; i++) {
                 const opt = document.getElementById(`p4-opt-${i}`);
                 const ico = document.getElementById(`p4-ico-${i}`);
                 if (i === index) {
@@ -1218,19 +1218,19 @@
             const feedback = document.getElementById('phase4-feedback');
             feedback.style.display = 'block';
 
-            if (p4Selected === 1) {
+            if (p4Selected === 0) {
                 feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
-                                      <p style="margin: 0.5rem 0 0 0;">Excellent! Constructive feedback is respectful, points directly to operational guidelines, and provides clear steps to fix the issues.</p>`;
+                                      <p style="margin: 0.5rem 0 0 0;">Excellent! Commenting on the missing portion and involving a senior ensures the issue is tracked and communicated professionally.</p>`;
                 finalScore += 25;
             } else {
-                feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ANSWER</h4>
-                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Threatening translators violates internal collaboration principles, and accepting flawed files violates our 100% acceptance standard.</p>`;
+                feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
+                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Ignoring the issue, fixing it silently, or taking destructive action violates protocol.</p>`;
             }
 
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 4; i++) {
                 const opt = document.getElementById(`p4-opt-${i}`);
                 opt.style.pointerEvents = 'none';
-                if (i === 1) opt.classList.add('correct');
+                if (i === 0) opt.classList.add('correct');
                 else if (i === p4Selected) opt.classList.add('incorrect');
             }
 
@@ -1302,9 +1302,10 @@
                 "Wait until the deadline to verify if metadata and OST screenshots are added."
             ];
             const p4Answers = [
-                "Threatening/Rude tone",
-                "Constructive/Professional feedback (Correct)",
-                "Passive/Lenient feedback"
+                "Comment out what is missing and inform senior so he can communicate with resource. (Correct)",
+                "Fix the missing portion yourself without telling anyone to save time.",
+                "Ignore the missing portion since the translator might add it later before the deadline.",
+                "Delete the document and ask the translator to start over from scratch."
             ];
 
             const p1Text = p1Selected === null ? "Timed Out" : p1Answers[p1Selected];
