@@ -466,12 +466,24 @@
 
             // Gather table data
             const tableData = [];
+            // We'll also extract the first row's answers directly for the spreadsheet columns
+            let firstOst = "";
+            let firstNotes = "";
+
             segments.forEach((seg, index) => {
+                const ostVal = document.getElementById(`ost_${index}`).value;
+                const notesVal = document.getElementById(`notes_${index}`).value;
+                
                 tableData.push({
                     timestamp: seg.label,
-                    ost: document.getElementById(`ost_${index}`).value,
-                    notes: document.getElementById(`notes_${index}`).value
+                    ost: ostVal,
+                    notes: notesVal
                 });
+
+                if (index === 0) {
+                    firstOst = ostVal;
+                    firstNotes = notesVal;
+                }
             });
 
             // --- Auto Verification Logic ---
@@ -503,7 +515,9 @@
                 difficultyLevel: difficultyLevel,
                 timeTaken: timeTakenString,
                 autoScore: `${finalScorePercentage}%`,
-                translations: JSON.stringify(tableData)
+                ostAnswer: firstOst,
+                notesAnswer: firstNotes,
+                translations: JSON.stringify(tableData) // Kept for backend completeness, but you can ignore this column in sheets
             };
 
             // Simulate submission UI
