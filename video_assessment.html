@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Translation Assessment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --table-header: #1e40af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 4rem;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer-container {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #f87171;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer-container.warning {
+            background: #b91c1c;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        main {
+            max-width: 1400px;
+            /* Increased to allow larger video resizing */
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .screenshots-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .screenshot-box {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            background: var(--bg);
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .screenshot-box img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+            display: none;
+            /* Show when real images are added */
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: var(--table-header);
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        th:last-child {
+            border-right: none;
+        }
+
+        td {
+            padding: 0;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+        td:first-child {
+            padding: 1rem;
+            font-weight: 600;
+            background: var(--bg);
+            white-space: nowrap;
+        }
+
+        td textarea {
+            width: 100%;
+            border: none;
+            border-radius: 0;
+            padding: 1rem;
+            background: transparent;
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        td textarea:focus {
+            box-shadow: inset 0 0 0 2px var(--primary);
+            background: rgba(37, 99, 235, 0.02);
+            outline: none;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        .success-message {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #bbf7d0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <i class="fas fa-video"></i>
+            <span>Video Translation Assessment</span>
+        </a>
+        <div class="timer-container" id="timerDisplay">
+            <i class="fas fa-clock"></i>
+            <span id="timeRemaining">02:00:00</span>
+        </div>
+    </header>
+
+    <main>
+        <div id="assessmentForm" class="card">
+            <h1>Translation Task</h1>
+            <p class="description">
+                Please review the clip below and provide the original text
+                (OST), and any relevant notes in the table. You have exactly 2 hours to complete this task.
+            </p>
+
+            <div class="form-group">
+                <label for="employeeName">Your Full Name / Employee ID <span style="color:red">*</span></label>
+                <input type="text" id="employeeName" placeholder="Enter your name to begin..." required>
+                <button class="btn" id="startAssessmentBtn" onclick="startAssessment()"
+                    style="margin-top: 1rem; width: auto; display: inline-flex;">Start Assessment</button>
+            </div>
+
+            <div id="assessmentContent" style="display: none;">
+                <!-- Translation Table -->
+                <h3 style="margin: 2rem 0 1rem;">Translation Data</h3>
+                <div class="table-container">
+                    <table id="translationTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">Timestamp</th>
+                                <th style="width: 45%">OST</th>
+                                <th style="width: 30%">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Extra Questions -->
+                <h3 style="margin: 2rem 0 1rem;">Additional Questions</h3>
+                <div class="form-group">
+                    <label for="difficultyLevel">How would you rate the difficulty of translating this specific video?
+                        <span style="color:red">*</span></label>
+                    <input type="text" id="difficultyLevel" placeholder="e.g. Easy, Medium, Hard" required>
+                </div>
+
+                <button class="btn" id="submitBtn" onclick="submitAssessment()">
+                    Submit Assessment <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+            <h2>Assessment Submitted Successfully!</h2>
+            <p style="margin-top: 0.5rem; font-size: 1.1rem;">Your responses and completion time have been recorded.</p>
+        </div>
+    </main>
+
+    <script>
+        // Pre-create the timestamps with video clip start/end times
+        const segments = [
+            { label: "00.20 - 00.32", start: 20, end: 32 }
+        ];
+
+        const tbody = document.getElementById('tableBody');
+
+        // Generate rows with mini video players
+        segments.forEach((seg, index) => {
+            const tr = document.createElement('tr');
+            // We use standard HTML5 media fragments (#t=start,end) to loop/clip the video
+            tr.innerHTML = `
+                <td style="padding: 10px; text-align: center;">
+                    <div style="resize: horizontal; overflow: hidden; width: 300px; min-width: 200px; max-width: 600px; margin: 0 auto;">
+                        <video controls preload="none" style="width: 100%; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: #000; margin-bottom: 5px;" src="assessment_video.mp4#t=${seg.start},${seg.end}"></video>
+                    </div>
+                </td>
+                <td style="vertical-align: top;"><textarea id="ost_${index}" placeholder="Enter OST..."></textarea></td>
+                <td style="vertical-align: top;"><textarea id="notes_${index}" placeholder="Any notes..."></textarea></td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Timer Logic (2 Hours)
+        let totalSeconds = 2 * 60 * 60; // 2 hours
+        let timerInterval;
+        const timeDisplay = document.getElementById('timeRemaining');
+        const timerContainer = document.getElementById('timerDisplay');
+        const nameInput = document.getElementById('employeeName');
+
+        function updateTimer() {
+            if (totalSeconds <= 0) {
+                clearInterval(timerInterval);
+                timeDisplay.textContent = "00:00:00";
+                alert("Time is up! Your assessment will be submitted automatically.");
+                submitAssessment();
+                return;
+            }
+
+            totalSeconds--;
+
+            // Add warning animation in last 5 minutes
+            if (totalSeconds <= 300 && !timerContainer.classList.contains('warning')) {
+                timerContainer.classList.add('warning');
+            }
+
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+
+            timeDisplay.textContent =
+                String(h).padStart(2, '0') + ':' +
+                String(m).padStart(2, '0') + ':' +
+                String(s).padStart(2, '0');
+        }
+
+        let timerStarted = false;
+
+        function startAssessment(isResume = false) {
+            let name = nameInput.value.trim();
+
+            if (isResume) {
+                name = localStorage.getItem('employeeName') || "Unknown";
+                nameInput.value = name;
+            } else {
+                if (!name) {
+                    alert("Please enter your name to begin the assessment.");
+                    nameInput.focus();
+                    return;
+                }
+                localStorage.setItem('employeeName', name);
+                localStorage.setItem('assessmentStartTime', Date.now());
+            }
+
+            nameInput.readOnly = true;
+            document.getElementById('startAssessmentBtn').style.display = 'none';
+            document.getElementById('assessmentContent').style.display = 'block';
+
+            if (!timerStarted) {
+                timerStarted = true;
+                // TEMPORARILY COMMENTED OUT TIMER START FOR DEVELOPMENT
+                // timerInterval = setInterval(updateTimer, 1000);
+                // updateTimer(); // Ensure immediate UI update
+            }
+        }
+
+        // Check for existing session on page load
+        window.addEventListener('load', function () {
+            const savedStartTime = localStorage.getItem('assessmentStartTime');
+            if (savedStartTime) {
+                const elapsedSeconds = Math.floor((Date.now() - parseInt(savedStartTime)) / 1000);
+                totalSeconds = (2 * 60 * 60) - elapsedSeconds;
+                if (totalSeconds < 0) totalSeconds = 0;
+                startAssessment(true);
+            }
+        });
+
+        // --- Answer Key for Auto-Verification ---
+        // Note: For long translations, we use 'fuzzy' matching to ignore case and punctuation.
+        const answerKey = {
+            translations: {
+                0: { // 0 is the first row
+                    ost: "Sir what is the password of neet 2026 question paper ?",
+                    notes: "Student asking for NEET 2026 question paper password"
+                }
+            }
+        };
+
+        // Helper function to clean text for fuzzy matching
+        function cleanText(text) {
+            if (!text) return "";
+            return text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ").trim();
+        }
+
+        // Submit Logic
+        function submitAssessment() {
+            const name = nameInput.value.trim();
+            const difficultyLevel = document.getElementById('difficultyLevel').value.trim();
+
+            if (!name) {
+                alert("Please enter your name before submitting.");
+                nameInput.focus();
+                return;
+            }
+
+            // Gather table data
+            const tableData = [];
+            segments.forEach((seg, index) => {
+                tableData.push({
+                    timestamp: seg.label,
+                    ost: document.getElementById(`ost_${index}`).value,
+                    notes: document.getElementById(`notes_${index}`).value
+                });
+            });
+
+            // --- Auto Verification Logic ---
+            let score = 0;
+            let maxScore = 0;
+
+            // Check translations (fuzzy match)
+            Object.keys(answerKey.translations).forEach(rowIndex => {
+                maxScore += 2; // 1 point each for OST and Notes
+                const correct = answerKey.translations[rowIndex];
+                const student = tableData[rowIndex];
+
+                // We check if the student's answer at least *contains* the core correct answer
+                if (cleanText(student.ost).includes(cleanText(correct.ost))) score++;
+                if (cleanText(student.notes).includes(cleanText(correct.notes))) score++;
+            });
+
+            const finalScorePercentage = Math.round((score / maxScore) * 100);
+
+            // Calculate time taken
+            const timeTakenSeconds = (2 * 60 * 60) - totalSeconds;
+            const h = Math.floor(timeTakenSeconds / 3600);
+            const m = Math.floor((timeTakenSeconds % 3600) / 60);
+            const s = timeTakenSeconds % 60;
+            const timeTakenString = `${h}h ${m}m ${s}s`;
+
+            const payload = {
+                employeeName: name,
+                difficultyLevel: difficultyLevel,
+                timeTaken: timeTakenString,
+                autoScore: `${finalScorePercentage}%`,
+                translations: JSON.stringify(tableData)
+            };
+
+            // Simulate submission UI
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying & Submitting...';
+            document.getElementById('submitBtn').disabled = true;
+            clearInterval(timerInterval);
+
+            // Clear localStorage so the test can be retaken later if needed
+            localStorage.removeItem('assessmentStartTime');
+            localStorage.removeItem('employeeName');
+
+            // Google Apps Script Web App URL
+            // TODO: REPLACE THIS WITH YOUR DEPLOYED URL
+            const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjpThDAQ-_WTLclYBjZ0TF4-QHzdqMp7WW7fyzPoAmQnSy9zYdX1K59D7_Kh8f5oPNgg/exec";
+
+            if (GOOGLE_SCRIPT_URL === "YOUR_WEB_APP_URL_HERE") {
+                console.warn("Please replace GOOGLE_SCRIPT_URL with your actual Apps Script URL.");
+                // We will proceed to show the success message anyway for testing
+            }
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8",
+                },
+                body: JSON.stringify(payload)
+            }).then(response => {
+                showSuccessMessage(finalScorePercentage);
+            }).catch(error => {
+                console.error("Error submitting to Google Sheets:", error);
+                // Even if it fails (e.g. CORS block during local testing), we show success
+                showSuccessMessage(finalScorePercentage);
+            });
+
+        }
+
+        function showSuccessMessage(score) {
+            document.getElementById('assessmentForm').style.display = 'none';
+
+            // Update success message to show the auto-score
+            const successDiv = document.getElementById('successMessage');
+            successDiv.innerHTML = `
+                <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #166534;"></i>
+                <h2>Assessment Submitted Successfully!</h2>
+                <p style="margin-top: 0.5rem; font-size: 1.1rem;">Your responses have been recorded.</p>
+                <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+                    <strong>Auto-Verification Score:</strong> <span style="color: var(--primary); font-size: 1.2rem; font-weight: bold;">${score}%</span>
+                    <p style="font-size: 0.85rem; color: #666; margin-top: 5px;">(Note: Final score is subject to manual manager review)</p>
+                </div>
+            `;
+            successDiv.style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+
+</html>
