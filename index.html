@@ -7,7 +7,8 @@
     <title>Lingo Chaps — Reviewer Certification Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -125,6 +126,7 @@
                 opacity: 0;
                 transform: translateY(15px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -297,8 +299,8 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 400px;
-            margin-bottom: 2rem;
+            height: 220px;
+            margin-bottom: 1.25rem;
         }
 
         .whatsapp-header {
@@ -357,7 +359,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             position: relative;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
         }
 
         .whatsapp-message.received {
@@ -421,6 +423,11 @@
             background: rgba(239, 68, 68, 0.1);
         }
 
+        .sheet-tr.correct-row {
+            background: rgba(16, 185, 129, 0.1);
+            color: #166534;
+        }
+
         .sheet-td {
             padding: 10px;
         }
@@ -432,7 +439,7 @@
             background: #fff;
             color: #1e293b;
             padding: 2rem;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
             margin-bottom: 2rem;
             font-family: 'Times New Roman', Times, serif;
         }
@@ -604,16 +611,22 @@
             </div>
             <h1 style="text-align: center;">Reviewer Certification Portal</h1>
             <p style="text-align: center; font-size: 1.1rem;">
-                Validate your understanding of the **Lingo Chaps** project protocols. 
+                Validate your understanding of the **Lingo Chaps** project protocols.
                 This assessment simulates real-world intake, allocation, and QC review scenarios.
             </p>
-            
-            <div style="background: var(--sidebar-bg); padding: 1.5rem; border-radius: 16px; margin: 2rem 0; border: 1px solid var(--border);">
-                <h3 style="margin-bottom: 0.75rem; font-weight: 800;"><i class="fas fa-info-circle"></i> Assessment Guidelines:</h3>
-                <ul style="list-style-type: none; font-size: 0.95rem; display: flex; flex-direction: column; gap: 10px;">
-                    <li><i class="fas fa-clock" style="color: var(--primary);"></i> <b>Time limits:</b> Intake phase tests the WhatsApp 5-Minute response speed.</li>
-                    <li><i class="fas fa-check-circle" style="color: var(--secondary);"></i> <b>Passing Grade:</b> Must correctly audit all workflow violations to receive certificate.</li>
-                    <li><i class="fas fa-database" style="color: var(--primary);"></i> <b>Result Logged:</b> Your score is automatically recorded in the manager database sheet.</li>
+
+            <div
+                style="background: var(--sidebar-bg); padding: 1.5rem; border-radius: 16px; margin: 2rem 0; border: 1px solid var(--border);">
+                <h3 style="margin-bottom: 0.75rem; font-weight: 800;"><i class="fas fa-info-circle"></i> Assessment
+                    Guidelines:</h3>
+                <ul
+                    style="list-style-type: none; font-size: 0.95rem; display: flex; flex-direction: column; gap: 10px;">
+                    <li><i class="fas fa-clock" style="color: var(--primary);"></i> <b>Time limits:</b> Intake phase
+                        tests the WhatsApp 5-Minute response speed.</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--secondary);"></i> <b>Passing Grade:</b> Must
+                        correctly audit all workflow violations to receive certificate.</li>
+                    <li><i class="fas fa-database" style="color: var(--primary);"></i> <b>Result Logged:</b> Your score
+                        is automatically recorded in the manager database sheet.</li>
                 </ul>
             </div>
 
@@ -631,7 +644,8 @@
 
         <!-- Progress Indicator -->
         <div id="assessment-progress" style="display: none;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-light);">
+            <div
+                style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-light);">
                 <span id="progress-phase-name">Phase 1: Intake Test</span>
                 <span id="progress-step-text">Step 1 of 4</span>
             </div>
@@ -644,8 +658,9 @@
         <div id="screen-phase1" class="card" style="display: none;">
             <h2>Phase 1: Intake & Global Communications</h2>
             <p>
-                A new client dropped a message in your WhatsApp group. 
-                According to the <b>Global Communications Intake Protocol</b>, you must reply immediately. Respond before the timer expires!
+                A new client dropped a message in your WhatsApp group.
+                According to the <b>Global Communications Intake Protocol</b>, you must reply immediately. Respond
+                before the timer expires!
             </p>
 
             <div class="whatsapp-container">
@@ -657,14 +672,13 @@
                             <div class="whatsapp-status">Client is typing...</div>
                         </div>
                     </div>
-                    <div class="whatsapp-timer" id="whatsappTimer">Time Left: 05:00</div>
+                    <div class="whatsapp-timer" id="whatsappTimer">Time Left: 01:00</div>
                 </div>
                 <div class="whatsapp-body">
                     <div class="whatsapp-message received">
-                        Hey Lingo Chaps operations team! We have a new YouTube project ready. 
-                        It's a 2200-word video, language pair English to Arabic. ETA is tomorrow morning. 
+                        Hi, Can you pick up a task? Spanish, 00:00:00-00:15:00, ETA-8pm?
                         Can you confirm?
-                        <div class="whatsapp-message-time">10:15 AM</div>
+                        <div class="whatsapp-message-time">4:15 PM</div>
                     </div>
                 </div>
             </div>
@@ -674,15 +688,17 @@
                 <div class="option-list">
                     <div class="option-item" onclick="selectPhase1Option(0)" id="p1-opt-0">
                         <i class="far fa-circle" id="p1-ico-0"></i>
-                        <span>Wait for the assigned translator to confirm availability before replying to the client.</span>
+                        <span>Wait for the assigned translator to confirm availability before replying to the
+                            client.</span>
                     </div>
                     <div class="option-item" onclick="selectPhase1Option(1)" id="p1-opt-1">
                         <i class="far fa-circle" id="p1-ico-1"></i>
-                        <span>Reply immediately: "Received! Let me check the resource availability, OST quantity, and timezone. We will confirm the ETA in 5-10 minutes."</span>
+                        <span>Reply immediately: "Received! We will confirm the ETA in 5-10 minutes."</span>
                     </div>
                     <div class="option-item" onclick="selectPhase1Option(2)" id="p1-opt-2">
                         <i class="far fa-circle" id="p1-ico-2"></i>
-                        <span>Confirm immediately: "Yes, we can definitely do it, we'll start work right away!" (Without checking OST details or availability).</span>
+                        <span>Confirm immediately: "Yes, we can work on it, please assign. OR let me check the resource
+                            availability (in case there is a timezone difference).</span>
                     </div>
                 </div>
             </div>
@@ -700,52 +716,88 @@
         <div id="screen-phase2" class="card" style="display: none;">
             <h2>Phase 2: Allocation & Real-Time Tracking</h2>
             <p>
-                To maintain our <b>Zero-Delay status</b>, the project status must be updated in the allocation sheet immediately. 
-                Identify the row containing a **critical workflow violation** based on the <i>Lingo Chaps Operational Protocols</i>.
+                To maintain our <b>Zero-Delay status</b>, the project status must be updated in the allocation sheet
+                immediately.
+                Choose the correct format from the below option.
             </p>
 
             <div class="sheet-container">
                 <table class="sheet-table">
                     <thead>
                         <tr>
-                            <th class="sheet-th">ID</th>
                             <th class="sheet-th">Language</th>
-                            <th class="sheet-th">Linguist</th>
-                            <th class="sheet-th">Status</th>
-                            <th class="sheet-th">ETA</th>
-                            <th class="sheet-th">Template Status</th>
+                            <th class="sheet-th">Date of Enrollment</th>
+                            <th class="sheet-th">Assigned On</th>
+                            <th class="sheet-th">Video Link</th>
+                            <th class="sheet-th">Doc Link</th>
+                            <th class="sheet-th">Duration</th>
+                            <th class="sheet-th">Deadline of the task</th>
+                            <th class="sheet-th">Translators</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="sheet-tr" onclick="selectPhase2Row(1)" id="sheet-row-1">
-                            <td class="sheet-td">LC-291</td>
                             <td class="sheet-td">Spanish</td>
+                            <td class="sheet-td">01-05</td>
+                            <td class="sheet-td">Email</td>
+                            <td class="sheet-td"><span
+                                    style="color: var(--primary); text-decoration: underline;">//www.youtube.com/watch?v=aBcDeFgHiJk</span>
+                            </td>
+                            <td class="sheet-td">
+                                <span
+                                    style="background: rgba(0,0,0,0.05); padding: 4px 8px; border-radius: 6px; font-weight: 500; border: 1px solid var(--border); display: inline-flex; align-items: center;">
+                                    <span
+                                        style="background-color: #2b579a; color: white; padding: 2px 4px; border-radius: 3px; font-weight: 800; font-size: 0.7rem; margin-right: 6px; font-family: sans-serif; display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; line-height: 1;">W</span>Spanish_00:00:00-00:05:00.docx
+                                </span>
+                            </td>
+                            <td class="sheet-td">00:00:00-00:05:00</td>
+                            <td class="sheet-td">4:00 PM</td>
                             <td class="sheet-td">Maria G.</td>
-                            <td class="sheet-td" style="color: var(--secondary); font-weight: 600;">In Progress</td>
-                            <td class="sheet-td">May 23, 2026</td>
-                            <td class="sheet-td">Spanish_00:00:00-00:01:45</td>
                         </tr>
                         <tr class="sheet-tr" onclick="selectPhase2Row(2)" id="sheet-row-2">
-                            <td class="sheet-td">LC-292</td>
-                            <td class="sheet-td">Arabic</td>
-                            <td class="sheet-td">Ahmed K.</td>
-                            <td class="sheet-td" style="color: var(--text-light);">Not Logged Yet</td>
-                            <td class="sheet-td">--</td>
-                            <td class="sheet-td">Template.docx</td>
+                            <td class="sheet-td">Persian review</td>
+                            <td class="sheet-td">01-05</td>
+                            <td class="sheet-td"></td>
+                            <td class="sheet-td"><span
+                                    style="color: var(--primary); text-decoration: underline;">://www.youtube.com/watch?v=ChjH4m</span>
+                            </td>
+                            <td class="sheet-td">
+                                <span
+                                    style="background: rgba(0,0,0,0.05); padding: 4px 8px; border-radius: 6px; font-weight: 500; border: 1px solid var(--border); display: inline-flex; align-items: center;">
+                                    <span
+                                        style="background-color: #2b579a; color: white; padding: 2px 4px; border-radius: 3px; font-weight: 800; font-size: 0.7rem; margin-right: 6px; font-family: sans-serif; display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; line-height: 1;">W</span>Persian
+                                    Review_00:00:01-00:10:00
+                                </span>
+                            </td>
+                            <td class="sheet-td">00:00:01-00:10:00</td>
+                            <td class="sheet-td">mad Zubair Muhammad</td>
+                            <td class="sheet-td">9</td>
                         </tr>
                         <tr class="sheet-tr" onclick="selectPhase2Row(3)" id="sheet-row-3">
-                            <td class="sheet-td">LC-293</td>
-                            <td class="sheet-td">French</td>
-                            <td class="sheet-td">Clara L.</td>
-                            <td class="sheet-td" style="color: var(--secondary); font-weight: 600;">Allocated</td>
-                            <td class="sheet-td">May 23, 2026</td>
-                            <td class="sheet-td">French_00:00:00-00:01:45</td>
+                            <td class="sheet-td">Bahasa</td>
+                            <td class="sheet-td">01-05</td>
+                            <td class="sheet-td">Lumos</td>
+                            <td class="sheet-td"><span
+                                    style="color: var(--primary); text-decoration: underline;">//www.youtube.com/watch?v=JkZciy</span>
+                            </td>
+                            <td class="sheet-td">
+                                <span
+                                    style="background: rgba(0,0,0,0.05); padding: 4px 8px; border-radius: 6px; font-weight: 500; border: 1px solid var(--border); display: inline-flex; align-items: center;">
+                                    <span
+                                        style="background-color: #2b579a; color: white; padding: 2px 4px; border-radius: 3px; font-weight: 800; font-size: 0.7rem; margin-right: 6px; font-family: sans-serif; display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; line-height: 1;">W</span>Bahasa_00.00.00-
+                                    00.03.31.docx
+                                </span>
+                            </td>
+                            <td class="sheet-td"></td>
+                            <td class="sheet-td">5.30 PM</td>
+                            <td class="sheet-td">Silvi Lidia Haji</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <p style="font-size: 0.9rem; font-style: italic;">Hint: Click on the row that violates the core protocols (real-time milestone log, naming conventions).</p>
+            <p style="font-size: 0.9rem; font-style: italic;">Hint: Click on the row that correctly follows all
+                operational and naming guidelines.</p>
 
             <div class="feedback-box" id="phase2-feedback"></div>
 
@@ -760,22 +812,26 @@
         <div id="screen-phase3" class="card" style="display: none;">
             <h2>Phase 3: Quality Control & Document Audit</h2>
             <p>
-                The translator has submitted their work. Under the **Linguist Execution Protocol**, 
-                you must verify that the work was completed in the online Google Doc link, that no Machine Translation (MT) was used, 
+                The translator has submitted their work. Under the **Linguist Execution Protocol**,
+                you must verify that the work was completed in the online Google Doc link, that no Machine Translation
+                (MT) was used,
                 and that all mandatory template header details are filled.
             </p>
-            <p><strong>Auditing Task:</strong> Click on the rows that represent a **critical protocol violation** in this submission snippet:</p>
+            <p><strong>Auditing Task:</strong> Click on the rows that represent a **critical protocol violation** in
+                this submission snippet:</p>
 
             <div class="doc-container">
                 <div class="doc-header-block">
-                    <div style="font-weight: bold; font-size: 1.2rem; text-align: center; margin-bottom: 0.5rem;">LINGUIST AUDIT REPORT</div>
-                    <div style="font-size: 0.9rem; text-align: center;">Project: LC-291-Spanish | Reviewer checklist</div>
+                    <div style="font-weight: bold; font-size: 1.2rem; text-align: center; margin-bottom: 0.5rem;">
+                        LINGUIST AUDIT REPORT</div>
+                    <div style="font-size: 0.9rem; text-align: center;">Project: LC-291-Spanish | Reviewer checklist
+                    </div>
                 </div>
-                
+
                 <div class="doc-row" onclick="toggleDocRow(1)" id="doc-row-1">
                     <span style="font-weight: 700;">Row 1:</span>
                     <div>
-                        <b>Linguist Workspace:</b> Work completed directly via Google Docs online link. 
+                        <b>Linguist Workspace:</b> Work completed directly via Google Docs online link.
                         No local files used.
                     </div>
                 </div>
@@ -783,7 +839,7 @@
                 <div class="doc-row" onclick="toggleDocRow(2)" id="doc-row-2">
                     <span style="font-weight: 700;">Row 2:</span>
                     <div>
-                        <b>Translation Method:</b> Segment 5 used Google Translate to speed up phrasing. 
+                        <b>Translation Method:</b> Segment 5 used Google Translate to speed up phrasing.
                         Linguist did not review context.
                     </div>
                 </div>
@@ -798,12 +854,14 @@
                 <div class="doc-row" onclick="toggleDocRow(4)" id="doc-row-4">
                     <span style="font-weight: 700;">Row 4:</span>
                     <div>
-                        <b>Submission Method:</b> Work was exported to a local `.docx` file and sent via email, leaving the online Google Doc blank.
+                        <b>Submission Method:</b> Work was exported to a local `.docx` file and sent via email, leaving
+                        the online Google Doc blank.
                     </div>
                 </div>
             </div>
 
-            <p style="font-size: 0.9rem; font-style: italic;">Hint: Multiple rows can contain violations. Click all that apply.</p>
+            <p style="font-size: 0.9rem; font-style: italic;">Hint: Multiple rows can contain violations. Click all that
+                apply.</p>
 
             <div class="feedback-box" id="phase3-feedback"></div>
 
@@ -818,7 +876,7 @@
         <div id="screen-phase4" class="card" style="display: none;">
             <h2>Phase 4: Rework & Professional Feedback</h2>
             <p>
-                When a linguist violates guidelines, you must formulate constructive, professional feedback. 
+                When a linguist violates guidelines, you must formulate constructive, professional feedback.
                 Select the feedback draft that aligns best with **Lingo Chaps' core communication standards**:
             </p>
 
@@ -826,11 +884,16 @@
                 <div class="option-list">
                     <div class="option-item" onclick="selectPhase4Option(0)" id="p4-opt-0">
                         <i class="far fa-circle" id="p4-ico-0"></i>
-                        <span>"Your translation is terrible. You clearly used Google Translate. Do this manually or we will terminate your project."</span>
+                        <span>"Your translation is terrible. You clearly used Google Translate. Do this manually or we
+                            will terminate your project."</span>
                     </div>
                     <div class="option-item" onclick="selectPhase4Option(1)" id="p4-opt-1">
                         <i class="far fa-circle" id="p4-ico-1"></i>
-                        <span>"Hi there! Thanks for your submission. We noticed a couple of sections (e.g., segment 5) that resemble machine translation, and the work was submitted offline instead of the online doc. As per our standards, please migrate the translation to the Google Doc link, review the phrasing to ensure it is 100% human-verified, and add the video summary. Thank you for your support!"</span>
+                        <span>"Hi there! Thanks for your submission. We noticed a couple of sections (e.g., segment 5)
+                            that resemble machine translation, and the work was submitted offline instead of the online
+                            doc. As per our standards, please migrate the translation to the Google Doc link, review the
+                            phrasing to ensure it is 100% human-verified, and add the video summary. Thank you for your
+                            support!"</span>
                     </div>
                     <div class="option-item" onclick="selectPhase4Option(2)" id="p4-opt-2">
                         <i class="far fa-circle" id="p4-ico-2"></i>
@@ -851,7 +914,7 @@
         <!-- Results Screen & Certificate -->
         <div id="screen-results" class="card" style="display: none;">
             <h1 style="text-align: center;">Assessment Results</h1>
-            
+
             <div class="score-display">
                 <div class="score-circle" id="scoreCircle">
                     <div class="score-value" id="scoreValue">0%</div>
@@ -870,9 +933,10 @@
                 <div>This is to certify that</div>
                 <div class="cert-name" id="certName">JANE DOE</div>
                 <div>has successfully demonstrated proficiency in the</div>
-                <div style="font-weight: 700; margin: 10px 0; color: var(--primary);">Lingo Chaps YouTube Operational Workflow</div>
+                <div style="font-weight: 700; margin: 10px 0; color: var(--primary);">Lingo Chaps YouTube Operational
+                    Workflow</div>
                 <div>covering Intake speed, Allocation logging, and QC Audit protocols.</div>
-                
+
                 <div class="cert-meta">
                     <div>
                         <div style="font-weight: 700;">DATE</div>
@@ -887,7 +951,8 @@
 
             <div style="text-align: center; margin-top: 2.5rem; display: flex; justify-content: center; gap: 15px;">
                 <button class="btn" onclick="retryQuiz()"><i class="fas fa-redo"></i> Try Again</button>
-                <button class="btn btn-secondary" onclick="window.print()" id="btnPrint"><i class="fas fa-print"></i> Print Certificate</button>
+                <button class="btn btn-secondary" onclick="window.print()" id="btnPrint"><i class="fas fa-print"></i>
+                    Print Certificate</button>
             </div>
         </div>
     </main>
@@ -901,7 +966,7 @@
     <script>
         // Set your Google Sheet Script Web App URL here
         // Set this to enable automatic logging of scores
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZaJs9gLLoV_eSC0L-uMG4YMNB82i1kC9rlxMwUsI8pK5kBfE2NxpNBIu7Pm5LV3RW/exec"; 
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZaJs9gLLoV_eSC0L-uMG4YMNB82i1kC9rlxMwUsI8pK5kBfE2NxpNBIu7Pm5LV3RW/exec";
 
         let currentPhase = 1;
         let userName = "";
@@ -911,7 +976,7 @@
         let p3SelectedRows = [];
         let p4Selected = null;
         let finalScore = 0;
-        let secondsLeft = 300; // 5 Minutes in seconds
+        let secondsLeft = 30; // 30 seconds
 
         // Toggle Dark Mode
         function toggleDarkMode() {
@@ -950,15 +1015,15 @@
 
         // Timer for Phase 1
         function startTimer() {
-            secondsLeft = 300;
+            secondsLeft = 30;
             const timerDiv = document.getElementById('whatsappTimer');
             timerInterval = setInterval(() => {
                 secondsLeft--;
                 let mins = Math.floor(secondsLeft / 60);
                 let secs = secondsLeft % 60;
                 timerDiv.innerText = `Time Left: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                
-                if (secondsLeft <= 30) {
+
+                if (secondsLeft <= 10) {
                     timerDiv.style.color = '#ff3333';
                 }
 
@@ -981,7 +1046,7 @@
 
         function showPhase(phase) {
             currentPhase = phase;
-            
+
             // Hide all phases
             document.getElementById('screen-phase1').style.display = 'none';
             document.getElementById('screen-phase2').style.display = 'none';
@@ -1033,25 +1098,26 @@
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> RESPONSE TIMED OUT</h4>
                                       <p style="margin: 0.5rem 0 0 0;">Lingo Chaps requires an <b>Instant Reply</b> in WhatsApp/Email groups within 2-5 minutes. You failed to respond in time.</p>`;
                 finalScore += 0;
-            } else if (p1Selected === 1) {
+            } else if (p1Selected === 2) {
                 feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
-                                      <p style="margin: 0.5rem 0 0 0;">Excellent! The 5-Minute Rule mandates an immediate confirmation reply to reassure the client, while stating that resource and timezone details are being reviewed.</p>`;
+                                      <p style="margin: 0.5rem 0 0 0;">Excellent! Confirming immediately or checking availability with timezone awareness keeps client communication prompt and accurate.</p>`;
                 finalScore += 25;
             } else {
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
-                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Waiting for translators violates the 5-Minute rule. Conversely, confirming immediately without verification might result in missed deadlines if resources are busy.</p>`;
+                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Waiting for translators violates the 5-Minute rule. Conversely, a general acknowledgment without confirming or checking resource availability and timezone difference is not optimal.</p>`;
             }
 
             // Highlight answer states
             for (let i = 0; i < 3; i++) {
                 const opt = document.getElementById(`p1-opt-${i}`);
                 opt.style.pointerEvents = 'none';
-                if (i === 1) opt.classList.add('correct');
+                if (i === 2) opt.classList.add('correct');
                 else if (i === p1Selected) opt.classList.add('incorrect');
             }
 
             // Move to Next button styling
             const btn = document.getElementById('btn-phase1-next');
+            btn.removeAttribute('disabled');
             btn.innerHTML = `Proceed to Phase 2 <i class="fas fa-arrow-right"></i>`;
             btn.onclick = () => showPhase(2);
         }
@@ -1061,10 +1127,12 @@
             p2Selected = index;
             for (let i = 1; i <= 3; i++) {
                 const row = document.getElementById(`sheet-row-${i}`);
-                if (i === index) {
-                    row.classList.add('selected');
-                } else {
-                    row.classList.remove('selected');
+                if (row) {
+                    if (i === index) {
+                        row.classList.add('selected');
+                    } else {
+                        row.classList.remove('selected');
+                    }
                 }
             }
             document.getElementById('btn-phase2-next').removeAttribute('disabled');
@@ -1075,20 +1143,32 @@
             const feedback = document.getElementById('phase2-feedback');
             feedback.style.display = 'block';
 
-            if (p2Selected === 2) {
+            if (p2Selected === 1) {
                 feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
-                                      <p style="margin: 0.5rem 0 0 0;">Spot on! Row 2 shows status as 'Not Logged Yet' and template status as 'Template.docx'. The Zero-Delay protocol mandates updating details and renaming files immediately upon project allocation.</p>`;
+                                      <p style="margin: 0.5rem 0 0 0;">Spot on! Row 1 (Spanish) is the only row that correctly follows all operational and naming guidelines, with complete assignment logs and correct file naming/durations (<code>Spanish_00:00:00-00:05:00.docx</code>).</p>`;
                 finalScore += 25;
             } else {
+                let errorText = "";
+                if (p2Selected === 3) {
+                    errorText = "Row 3 (Bahasa) contains period/dot separators and spaces (<code>Bahasa_00.00.00- 00.03.31.docx</code>), which violates our formatting standards.";
+                } else if (p2Selected === 2) {
+                    errorText = "Row 2 (Persian review) has a missing 'Assigned On' field, an invalid link format (missing <code>/</code> or <code>https:</code>), and is missing the <code>.docx</code> extension in the document name.";
+                }
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ROW SELECTED</h4>
-                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Rows 1 and 3 correctly show that the status is updated, and the template files are renamed per naming standards.</p>`;
+                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> ${errorText} Row 1 (Spanish) is the only row with correct format and tracking logs.</p>`;
             }
 
             // Highlight rows
             for (let i = 1; i <= 3; i++) {
                 const row = document.getElementById(`sheet-row-${i}`);
-                row.style.pointerEvents = 'none';
-                if (i === 2) row.classList.add('flagged');
+                if (row) {
+                    row.style.pointerEvents = 'none';
+                    if (i === 1) {
+                        row.classList.add('correct-row');
+                    } else if (i === p2Selected) {
+                        row.classList.add('flagged');
+                    }
+                }
             }
 
             const btn = document.getElementById('btn-phase2-next');
@@ -1132,7 +1212,7 @@
                 if (isRow3Selected) text += "<br>- Row 3 is actually correct behavior.";
                 if (!isRow2Selected) text += "<br>- You missed the prohibited Google Translate usage in Row 2.";
                 if (!isRow4Selected) text += "<br>- You missed the prohibited offline file submission in Row 4.";
-                
+
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> AUDIT FAILED</h4>
                                       <p style="margin: 0.5rem 0 0 0;">${text}</p>`;
             }
@@ -1213,7 +1293,7 @@
                 scoreCircle.style.borderColor = 'var(--secondary)';
                 scoreValue.style.color = 'var(--secondary)';
                 resultsExplanation.innerHTML = `<b>Congratulations!</b> You passed with a perfect score. You are now fully certified to review Lingo Chaps YouTube translation projects.`;
-                
+
                 // Show Certificate
                 document.getElementById('certName').innerText = userName.toUpperCase();
                 document.getElementById('certDate').innerText = new Date().toLocaleDateString('en-US', {
@@ -1242,15 +1322,15 @@
             }
 
             const p1Answers = [
-                "Wait for translator",
-                "Acknowledge & check timezone/ETA (Correct)",
-                "Confirm immediately without checking resources"
+                "Wait for the assigned translator to confirm availability",
+                "Reply immediately: 'Received! We will confirm the ETA in 5-10 minutes.'",
+                "Confirm immediately: 'Yes, we can work on it, please assign. OR let me check the resource availability (in case there is a timezone difference).' (Correct)"
             ];
             const p2Answers = [
                 "", // 1-indexed
-                "Row 1 (Spanish - Maria G.)",
-                "Row 2 (Arabic - Ahmed K. - Violation) (Correct)",
-                "Row 3 (French - Clara L.)"
+                "Row 1 (Spanish - Correct Format) (Correct)",
+                "Row 2 (Persian review - Incomplete/Incorrect)",
+                "Row 3 (Bahasa - Violation/Incorrect)"
             ];
             const p3Answers = {
                 1: "Row 1 (Google Docs online link - Correct)",
@@ -1282,8 +1362,8 @@
                 mode: "no-cors",
                 body: JSON.stringify(payload)
             })
-            .then(() => console.log("Request sent to Google Sheets Web App."))
-            .catch(error => console.error("Error logging score: ", error));
+                .then(() => console.log("Request sent to Google Sheets Web App."))
+                .catch(error => console.error("Error logging score: ", error));
         }
 
         // Retry Quiz
