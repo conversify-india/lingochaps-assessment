@@ -217,23 +217,31 @@
             white-space: nowrap;
         }
 
-        td textarea {
+        td .editable-cell {
             width: 100%;
             border: none;
             border-radius: 0;
             padding: 1rem;
             background: transparent;
             min-height: 120px;
-            resize: vertical;
             font-family: inherit;
             font-size: 0.95rem;
             line-height: 1.5;
+            outline: none;
+            overflow-y: auto;
         }
 
-        td textarea:focus {
+        td .editable-cell:focus {
             box-shadow: inset 0 0 0 2px var(--primary);
             background: rgba(37, 99, 235, 0.02);
-            outline: none;
+        }
+        
+        td .editable-cell img {
+            max-width: 100%;
+            display: block;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid var(--border);
         }
 
         .btn {
@@ -356,8 +364,8 @@
                         <video controls preload="none" style="width: 100%; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: #000; margin-bottom: 5px;" src="assessment_video.mp4#t=${seg.start},${seg.end}"></video>
                     </div>
                 </td>
-                <td style="vertical-align: top;"><textarea id="ost_${index}" placeholder="Enter OST..."></textarea></td>
-                <td style="vertical-align: top;"><textarea id="notes_${index}" placeholder="Any notes..."></textarea></td>
+                <td style="vertical-align: top;"><div class="editable-cell" id="ost_${index}" contenteditable="true" data-placeholder="Enter OST or paste screenshot here..."></div></td>
+                <td style="vertical-align: top;"><div class="editable-cell" id="notes_${index}" contenteditable="true" data-placeholder="Any notes or paste screenshot here..."></div></td>
             `;
             tbody.appendChild(tr);
         });
@@ -368,6 +376,16 @@
         const timeDisplay = document.getElementById('timeRemaining');
         const timerContainer = document.getElementById('timerDisplay');
         const nameInput = document.getElementById('employeeName');
+
+        // Allow styling for placeholder text in contenteditable
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .editable-cell:empty:before {
+                content: attr(data-placeholder);
+                color: #9ca3af;
+            }
+        `;
+        document.head.appendChild(style);
 
         function updateTimer() {
             if (totalSeconds <= 0) {
@@ -470,8 +488,12 @@
             let firstNotes = "";
 
             segments.forEach((seg, index) => {
-                const ostVal = document.getElementById(`ost_${index}`).value;
-                const notesVal = document.getElementById(`notes_${index}`).value;
+                const ostEl = document.getElementById(`ost_${index}`);
+                const notesEl = document.getElementById(`notes_${index}`);
+                
+                // Get innerHTML so we capture both text and the base64 images
+                const ostVal = ostEl.innerHTML;
+                const notesVal = notesEl.innerHTML;
                 
                 tableData.push({
                     timestamp: seg.label,
