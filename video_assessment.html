@@ -419,9 +419,8 @@
 
             if (!timerStarted) {
                 timerStarted = true;
-                // TEMPORARILY COMMENTED OUT TIMER START FOR DEVELOPMENT
-                // timerInterval = setInterval(updateTimer, 1000);
-                // updateTimer(); // Ensure immediate UI update
+                timerInterval = setInterval(updateTimer, 1000);
+                updateTimer(); // Ensure immediate UI update
             }
         }
 
