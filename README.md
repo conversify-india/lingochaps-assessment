@@ -22,9 +22,3 @@ Instead of creating entirely new GitHub repositories for every single client, it
 - `/client-a/video_assessment.html`
 - `/client-b/translation_test.html`
 This keeps everything in one place, and the links would just be: `https://conversify-india.github.io/lingochaps-assessment/client-a/video_assessment.html`
-
-**Option 2: Separate Repositories**
-If you strictly want separate repositories for security or organizational reasons, you will need to go to GitHub.com, click the **"+"** icon in the top right, select **"New repository"**, and then we can push specific code to those new repositories!
-
-## ⚙️ Google Sheets Integration
-The assessments are connected to a Google Apps Script that securely logs the candidate's Name, Time Taken, Difficulty, and Auto-Score directly to a private Google Sheet.
