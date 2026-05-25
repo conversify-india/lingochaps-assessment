@@ -181,40 +181,49 @@
         /* Table Styles */
         .table-container {
             overflow-x: auto;
+            overflow-y: auto;
+            max-height: 65vh; /* Keep table within view */
             border-radius: 8px;
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
+            background: var(--card-bg);
+            border: 1px solid #94a3b8;
         }
 
         th {
+            position: sticky;
+            top: 0;
+            z-index: 5;
             background: var(--table-header);
             color: white;
             padding: 1rem;
             font-weight: 600;
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        th:last-child {
-            border-right: none;
+            border: 1px solid #7c8ea3;
+            text-align: center;
         }
 
         td {
             padding: 0;
-            border-bottom: 1px solid var(--border);
-            border-right: 1px solid var(--border);
+            border: 1px solid #94a3b8;
+            vertical-align: top;
         }
 
         td:first-child {
             padding: 1rem;
             font-weight: 600;
-            background: var(--bg);
-            white-space: nowrap;
+            background: rgba(248, 250, 252, 0.8);
+            border-right: 2px solid #94a3b8;
+        }
+
+        tbody tr:nth-child(even) td:not(:first-child) {
+            background: rgba(241, 245, 249, 0.4);
         }
 
         td .editable-cell {
@@ -236,12 +245,129 @@
             background: rgba(37, 99, 235, 0.02);
         }
         
-        td .editable-cell img {
+        .resizable-image-wrapper {
+            resize: both;
+            overflow: hidden;
+            display: inline-block;
+            width: 250px;
+            height: 150px;
+            min-width: 100px;
+            min-height: 100px;
             max-width: 100%;
-            display: block;
             margin: 5px 0;
-            border-radius: 4px;
+            border: 2px dashed #94a3b8;
+            border-radius: 6px;
+            position: relative;
+            cursor: zoom-in;
+            background: #f8fafc;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: border-color 0.2s;
+        }
+
+        .resizable-image-wrapper:hover {
+            border-color: var(--primary);
+        }
+        
+        .resizable-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+        }
+        .image-delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--text-dark);
+            box-shadow: none;
+        }
+
+        .format-btn {
+            padding: 0.35rem 0.6rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .format-btn:hover {
+            background: rgba(0,0,0,0.05);
             border: 1px solid var(--border);
+        }
+
+        /* Form Controls */
+        .image-delete-btn:hover {
+            background: rgba(220, 38, 38, 1);
+        }
+
+        .resizable-image-wrapper:hover .image-delete-btn {
+            display: flex;
+        }
+
+        /* Assessment Layout */
+        .assessment-layout {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .video-section {
+            resize: horizontal;
+            overflow: hidden;
+            width: 380px;
+            min-width: 250px;
+            max-width: 800px;
+            padding-right: 15px;
+        }
+
+        .video-sticky-container {
+            position: sticky;
+            top: 90px;
+        }
+
+        /* Fullscreen Image Overlay */
+        .image-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            cursor: zoom-out;
+        }
+        
+        .image-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
         .btn {
@@ -307,34 +433,65 @@
             </div>
 
             <div id="assessmentContent" style="display: none;">
-                <!-- Translation Table -->
-                <h3 style="margin: 2rem 0 1rem;">Translation Data</h3>
-                <div class="table-container">
-                    <table id="translationTable">
-                        <thead>
-                            <tr>
-                                <th style="width: 25%">Timestamp</th>
-                                <th style="width: 45%">OST</th>
-                                <th style="width: 30%">Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <!-- Rows injected via JS -->
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Split Layout -->
+                <div class="assessment-layout">
+                    <!-- Left Side: Video -->
+                    <div class="video-section">
+                        <h3 style="margin-bottom: 1rem;">Reference Video</h3>
+                        <div class="video-sticky-container">
+                            <video id="mainVideoPlayer" controls preload="none" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); background: #000;" src=""></video>
+                        </div>
+                    </div>
 
-                <!-- Extra Questions -->
-                <h3 style="margin: 2rem 0 1rem;">Additional Questions</h3>
-                <div class="form-group">
-                    <label for="difficultyLevel">How would you rate the difficulty of translating this specific video?
-                        <span style="color:red">*</span></label>
-                    <input type="text" id="difficultyLevel" placeholder="e.g. Easy, Medium, Hard" required>
-                </div>
+                    <!-- Right Side: Table and Questions -->
+                    <div class="table-section">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <h3 style="margin: 0;">Translation Data</h3>
+                            
+                            <!-- Formatting Toolbar -->
+                            <div class="formatting-toolbar" style="display: flex; gap: 0.25rem; background: var(--sidebar-bg); padding: 0.25rem 0.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('bold')" title="Bold"><i class="fas fa-bold"></i></button>
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('italic')" title="Italic"><i class="fas fa-italic"></i></button>
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('underline')" title="Underline"><i class="fas fa-underline"></i></button>
+                                <div style="width: 1px; background: var(--border); margin: 0 4px;"></div>
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('hiliteColor', 'yellow')" title="Highlight Yellow" style="color: #eab308;"><i class="fas fa-highlighter"></i></button>
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('hiliteColor', 'transparent')" title="Remove Highlight"><i class="fas fa-eraser"></i></button>
+                            </div>
+                        </div>
 
-                <button class="btn" id="submitBtn" onclick="submitAssessment()">
-                    Submit Assessment <i class="fas fa-paper-plane"></i>
-                </button>
+                        <div class="table-container">
+                            <table id="translationTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%">Timestamp</th>
+                                        <th style="width: 45%">OST</th>
+                                        <th style="width: 30%">Notes</th>
+                                        <th style="width: 5%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                    <!-- Rows injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button class="btn" style="background: var(--secondary); margin-bottom: 2.5rem; width: auto; display: inline-flex;" onclick="addNewRow('')">
+                            <i class="fas fa-plus"></i> Add Row for more OSTs
+                        </button>
+
+                        <!-- Extra Questions -->
+                        <h3 style="margin-bottom: 1rem; padding-top: 2rem; border-top: 1px solid var(--border);">Additional Questions</h3>
+                        <div class="form-group">
+                            <label for="difficultyLevel">How would you rate the difficulty of translating this specific video?
+                                <span style="color:red">*</span></label>
+                            <input type="text" id="difficultyLevel" placeholder="e.g. Easy, Medium, Hard" required>
+                        </div>
+
+                        <button class="btn" id="submitBtn" onclick="submitAssessment()">
+                            Submit Assessment <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -343,6 +500,11 @@
             <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem;"></i>
             <h2>Assessment Submitted Successfully!</h2>
             <p style="margin-top: 0.5rem; font-size: 1.1rem;">Your responses and completion time have been recorded.</p>
+        </div>
+
+        <!-- Fullscreen Image Overlay -->
+        <div id="imageOverlay" class="image-overlay" onclick="this.style.display='none'">
+            <img id="overlayImage" src="" alt="Enlarged view">
         </div>
     </main>
 
@@ -354,21 +516,89 @@
 
         const tbody = document.getElementById('tableBody');
 
-        // Generate rows with mini video players
-        segments.forEach((seg, index) => {
+        // Initialize the split layout with the video and first row
+        const mainVideoPlayer = document.getElementById('mainVideoPlayer');
+        
+        let rowIndex = 0;
+        
+        if (segments.length > 0) {
+            mainVideoPlayer.src = `assessment_video.mp4#t=${segments[0].start},${segments[0].end}`;
+            // Use the requested default format for the first row
+            addNewRow("00.00.00 - 00.01.00"); 
+        } else {
+            addNewRow("00.00.00 - 00.01.00");
+        }
+
+        function generateNextTimestamp(lastTimestamp) {
+            // Match pattern like 00.00.00 - 00.01.00 (supports . or : separators)
+            const regex = /(\d{2})[\.\:](\d{2})[\.\:](\d{2})\s*-\s*(\d{2})[\.\:](\d{2})[\.\:](\d{2})/;
+            const match = lastTimestamp.match(regex);
+            if (match) {
+                // The new start time is the old end time
+                const startH = match[4];
+                const startM = match[5];
+                const startS = match[6];
+                
+                let h = parseInt(startH, 10);
+                let m = parseInt(startM, 10) + 1;
+                let s = parseInt(startS, 10);
+                
+                if (m >= 60) { m -= 60; h += 1; }
+                const pad = (n) => String(n).padStart(2, '0');
+                
+                return `${startH}.${startM}.${startS} - ${pad(h)}.${pad(m)}.${pad(s)}`;
+            }
+            return "00.00.00 - 00.01.00"; // Fallback
+        }
+
+        function addNewRow(defaultTimestamp = "") {
+            const tbody = document.getElementById('tableBody');
+            
+            // If no explicit timestamp is passed (e.g. from the 'Add Row' button), auto-increment based on the last row
+            if (!defaultTimestamp) {
+                const rows = tbody.querySelectorAll('tr');
+                if (rows.length > 0) {
+                    const lastRow = rows[rows.length - 1];
+                    const lastTimestampEl = lastRow.querySelector('.editable-cell');
+                    const lastTimestampText = lastTimestampEl ? lastTimestampEl.innerText.trim() : "";
+                    defaultTimestamp = generateNextTimestamp(lastTimestampText);
+                } else {
+                    defaultTimestamp = "00.00.00 - 00.01.00";
+                }
+            }
+
             const tr = document.createElement('tr');
-            // We use standard HTML5 media fragments (#t=start,end) to loop/clip the video
             tr.innerHTML = `
-                <td style="padding: 10px; text-align: center;">
-                    <div style="resize: horizontal; overflow: hidden; width: 300px; min-width: 200px; max-width: 600px; margin: 0 auto;">
-                        <video controls preload="none" style="width: 100%; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: #000; margin-bottom: 5px;" src="assessment_video.mp4#t=${seg.start},${seg.end}"></video>
+                <td style="vertical-align: top; padding: 10px;">
+                    <div class="editable-cell" contenteditable="true" data-placeholder="Type specific timestamp here (e.g. 00:24)..." style="min-height: 50px;">${defaultTimestamp}</div>
+                </td>
+                <td style="vertical-align: top; position: relative;">
+                    <div class="editable-cell" id="ost_${rowIndex}" contenteditable="true" data-placeholder="Enter OST, paste, or drop images here..." style="padding-bottom: 30px;"></div>
+                    <div style="position: absolute; bottom: 8px; right: 12px;">
+                        <label style="cursor: pointer; font-size: 0.8rem; color: var(--primary); font-weight: 500; background: rgba(37, 99, 235, 0.1); padding: 4px 8px; border-radius: 4px; transition: background 0.2s;">
+                            <i class="fas fa-upload"></i> Upload
+                            <input type="file" multiple accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'ost_${rowIndex}')">
+                        </label>
                     </div>
                 </td>
-                <td style="vertical-align: top;"><div class="editable-cell" id="ost_${index}" contenteditable="true" data-placeholder="Enter OST or paste screenshot here..."></div></td>
-                <td style="vertical-align: top;"><div class="editable-cell" id="notes_${index}" contenteditable="true" data-placeholder="Any notes or paste screenshot here..."></div></td>
+                <td style="vertical-align: top; position: relative;">
+                    <div class="editable-cell" id="notes_${rowIndex}" contenteditable="true" data-placeholder="Any notes, paste, or drop images..." style="padding-bottom: 30px;"></div>
+                    <div style="position: absolute; bottom: 8px; right: 12px;">
+                        <label style="cursor: pointer; font-size: 0.8rem; color: var(--primary); font-weight: 500; background: rgba(37, 99, 235, 0.1); padding: 4px 8px; border-radius: 4px; transition: background 0.2s;">
+                            <i class="fas fa-upload"></i> Upload
+                            <input type="file" multiple accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'notes_${rowIndex}')">
+                        </label>
+                    </div>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button onclick="this.closest('tr').remove()" style="background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.2rem;" title="Delete Row">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
             `;
             tbody.appendChild(tr);
-        });
+            rowIndex++;
+        }
 
         // Timer Logic (2 Hours)
         let totalSeconds = 2 * 60 * 60; // 2 hours
@@ -456,12 +686,22 @@
         // --- Answer Key for Auto-Verification ---
         // Note: For long translations, we use 'fuzzy' matching to ignore case and punctuation.
         const answerKey = {
-            translations: {
-                0: { // 0 is the first row
-                    ost: "Itne sajde kiye us yaar ke\nKi main dewaani, dewaani, dewaani ho gayi\nRang birangi nasen utha ke\nSajna ke sajde mein behne lagi",
-                    notes: "Insane, insane: Implying that the lover was so devoted"
-                }
-            }
+            requiredOstPhrases: [
+                "very fast moving question paper",
+                "National Testing Agency",
+                "safely reached the last destination with the highest level of security",
+                "ENSURED AT WHAT COST",
+                "WHAT IS THE COST OF THE LIVES OF STUDENTS",
+                "YOU GUYS REALLY PART OF THE STUDENTS DEATH"
+            ],
+            requiredNotesPhrases: [
+                "Insane, Insane",
+                "Prostration",
+                "Telegram",
+                "NEET-UG",
+                "Catering to my every colorful need",
+                "Music + non-lexical sound"
+            ]
         };
 
         // Helper function to clean text for fuzzy matching
@@ -487,16 +727,19 @@
             let firstOst = "";
             let firstNotes = "";
 
-            segments.forEach((seg, index) => {
-                const ostEl = document.getElementById(`ost_${index}`);
-                const notesEl = document.getElementById(`notes_${index}`);
+            const rows = document.getElementById('tableBody').querySelectorAll('tr');
+            rows.forEach((tr, index) => {
+                const timestampCell = tr.cells[0].querySelector('.editable-cell');
+                const timestampText = timestampCell ? timestampCell.innerText.trim() : "";
+
+                const ostEl = tr.cells[1].querySelector('.editable-cell');
+                const notesEl = tr.cells[2].querySelector('.editable-cell');
                 
-                // Get innerHTML so we capture both text and the base64 images
-                const ostVal = ostEl.innerHTML;
-                const notesVal = notesEl.innerHTML;
+                const ostVal = ostEl ? ostEl.innerHTML : "";
+                const notesVal = notesEl ? notesEl.innerHTML : "";
                 
                 tableData.push({
-                    timestamp: seg.label,
+                    timestamp: timestampText,
                     ost: ostVal,
                     notes: notesVal
                 });
@@ -509,17 +752,24 @@
 
             // --- Auto Verification Logic ---
             let score = 0;
-            let maxScore = 0;
+            let maxScore = answerKey.requiredOstPhrases.length + answerKey.requiredNotesPhrases.length;
 
-            // Check translations (fuzzy match)
-            Object.keys(answerKey.translations).forEach(rowIndex => {
-                maxScore += 2; // 1 point each for OST and Notes
-                const correct = answerKey.translations[rowIndex];
-                const student = tableData[rowIndex];
+            // Combine all rows into one giant string for robust matching (in case they split rows differently)
+            let combinedOst = tableData.map(row => cleanText(row.ost)).join(" ");
+            let combinedNotes = tableData.map(row => cleanText(row.notes)).join(" ");
 
-                // We check if the student's answer at least *contains* the core correct answer
-                if (cleanText(student.ost).includes(cleanText(correct.ost))) score++;
-                if (cleanText(student.notes).includes(cleanText(correct.notes))) score++;
+            // Check OST phrases
+            answerKey.requiredOstPhrases.forEach(phrase => {
+                if (combinedOst.includes(cleanText(phrase))) {
+                    score++;
+                }
+            });
+
+            // Check Notes phrases
+            answerKey.requiredNotesPhrases.forEach(phrase => {
+                if (combinedNotes.includes(cleanText(phrase))) {
+                    score++;
+                }
             });
 
             const finalScorePercentage = Math.round((score / maxScore) * 100);
@@ -566,16 +816,16 @@
                 },
                 body: JSON.stringify(payload)
             }).then(response => {
-                showSuccessMessage();
+                showSuccessMessage(finalScorePercentage);
             }).catch(error => {
                 console.error("Error submitting to Google Sheets:", error);
                 // Even if it fails (e.g. CORS block during local testing), we show success
-                showSuccessMessage();
+                showSuccessMessage(finalScorePercentage);
             });
 
         }
 
-        function showSuccessMessage() {
+        function showSuccessMessage(scorePercentage) {
             document.getElementById('assessmentForm').style.display = 'none';
 
             // Update success message to show the auto-score
@@ -583,13 +833,176 @@
             successDiv.innerHTML = `
                 <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #166534;"></i>
                 <h2>Assessment Submitted Successfully!</h2>
-                <p style="margin-top: 0.5rem; font-size: 1.1rem;">Your responses have been recorded.</p>
+                
+                <div style="margin: 2rem auto; padding: 2rem; background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 16px; max-width: 400px;">
+                    <p style="font-size: 1.1rem; color: #166534; font-weight: 600; margin-bottom: 0.5rem;">Translation Auto-Score</p>
+                    <div style="font-size: 3.5rem; font-weight: 800; color: #15803d;">${scorePercentage}%</div>
+                </div>
+
                 <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
-                    <p style="font-size: 0.85rem; color: #666; margin-top: 5px;">Your responses will be reviewed by a manager.</p>
+                    <p style="font-size: 0.95rem; color: #475569;">Your exact translations and time taken have been securely logged.</p>
                 </div>
             `;
             successDiv.style.display = 'block';
             window.scrollTo(0, 0);
+        }
+
+        // Handle Image Pasting in ContentEditable Cells
+        document.addEventListener('paste', function (e) {
+            const target = e.target;
+            
+            // Check if we are pasting into one of our editable cells
+            if (target && target.classList && target.classList.contains('editable-cell')) {
+                const items = (e.clipboardData || window.clipboardData).items;
+                
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    // If the pasted item is an image
+                    if (item.kind === 'file' && item.type.startsWith('image/')) {
+                        e.preventDefault(); // Prevent default paste behavior
+                        
+                        const blob = item.getAsFile();
+                        const reader = new FileReader();
+                        
+                        reader.onload = function (event) {
+                            const wrapper = document.createElement('div');
+                            wrapper.className = 'resizable-image-wrapper';
+                            wrapper.contentEditable = "false";
+                            
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+                            wrapper.appendChild(img);
+                            
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.className = 'image-delete-btn';
+                            deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                            deleteBtn.title = 'Remove Image';
+                            wrapper.appendChild(deleteBtn);
+                            
+                            // Insert the image at the current cursor position
+                            const selection = window.getSelection();
+                            if (selection.rangeCount > 0) {
+                                const range = selection.getRangeAt(0);
+                                range.deleteContents();
+                                range.insertNode(wrapper);
+                                
+                                // Add a space/break after the image so user can keep typing
+                                const br = document.createElement('br');
+                                range.insertNode(br);
+                                
+                                // Move cursor after the inserted elements
+                                range.setStartAfter(br);
+                                range.setEndAfter(br);
+                                selection.removeAllRanges();
+                                selection.addRange(range);
+                            } else {
+                                target.appendChild(wrapper);
+                                target.appendChild(document.createElement('br'));
+                            }
+                        };
+                        
+                        reader.readAsDataURL(blob);
+                        return; // Stop after first image to prevent duplicate firing
+                    }
+                }
+            }
+        });
+
+        // Handle Drag and Drop
+        document.addEventListener('dragover', function (e) {
+            if (e.target && e.target.classList && e.target.classList.contains('editable-cell')) {
+                e.preventDefault();
+                e.target.style.background = 'rgba(79, 70, 229, 0.05)';
+            }
+        });
+
+        document.addEventListener('dragleave', function (e) {
+            if (e.target && e.target.classList && e.target.classList.contains('editable-cell')) {
+                e.target.style.background = 'transparent';
+            }
+        });
+
+        document.addEventListener('drop', function (e) {
+            if (e.target && e.target.classList && e.target.classList.contains('editable-cell')) {
+                e.preventDefault();
+                e.target.style.background = 'transparent';
+
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const targetId = e.target.id;
+                    if (targetId) {
+                        const fakeEvent = { target: { files: files } };
+                        handleFileUpload(fakeEvent, targetId);
+                    }
+                }
+            }
+        });
+
+        // Handle File Upload Button
+        function handleFileUpload(event, targetId) {
+            const files = event.target.files;
+            const target = document.getElementById(targetId);
+            if (!target || !files.length) return;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'resizable-image-wrapper';
+                        wrapper.contentEditable = "false";
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        wrapper.appendChild(img);
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'image-delete-btn';
+                        deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                        deleteBtn.title = 'Remove Image';
+                        wrapper.appendChild(deleteBtn);
+                        
+                        target.appendChild(wrapper);
+                        target.appendChild(document.createElement('br'));
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+            event.target.value = '';
+        }
+
+        // Handle Click to Enlarge Images OR Delete
+        document.addEventListener('click', function(e) {
+            const deleteBtn = e.target.closest('.image-delete-btn');
+            if (deleteBtn) {
+                const wrapper = deleteBtn.closest('.resizable-image-wrapper');
+                if (wrapper) {
+                    wrapper.remove();
+                }
+                return;
+            }
+
+            const wrapper = e.target.closest('.resizable-image-wrapper');
+            if (wrapper && wrapper.closest('.editable-cell')) {
+                const img = wrapper.querySelector('img');
+                const overlay = document.getElementById('imageOverlay');
+                const overlayImg = document.getElementById('overlayImage');
+                if (overlay && overlayImg && img) {
+                    overlayImg.src = img.src;
+                    overlay.style.display = 'flex';
+                }
+            }
+        });
+
+        // Text Formatting Function
+        function formatText(command, value = null) {
+            if (command === 'hiliteColor') {
+                if (!document.execCommand('hiliteColor', false, value)) {
+                    document.execCommand('backColor', false, value);
+                }
+            } else {
+                document.execCommand(command, false, value);
+            }
         }
     </script>
 </body>

@@ -622,7 +622,7 @@
                 <ul
                     style="list-style-type: none; font-size: 0.95rem; display: flex; flex-direction: column; gap: 10px;">
                     <li><i class="fas fa-clock" style="color: var(--primary);"></i> <b>Time limits:</b> Intake phase
-                        tests the WhatsApp 5-Minute response speed.</li>
+                        tests the WhatsApp 1-Minute response speed.</li>
                     <li><i class="fas fa-check-circle" style="color: var(--secondary);"></i> <b>Passing Grade:</b> Must
                         correctly audit all workflow violations to receive certificate.</li>
                     <li><i class="fas fa-database" style="color: var(--primary);"></i> <b>Result Logged:</b> Your score
@@ -647,7 +647,7 @@
             <div
                 style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-light);">
                 <span id="progress-phase-name">Phase 1: Intake Test</span>
-                <span id="progress-step-text">Step 1 of 4</span>
+                <span id="progress-step-text">Step 1 of 8</span>
             </div>
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" id="progressBarFill"></div>
@@ -707,6 +707,64 @@
 
             <div style="text-align: right; margin-top: 1.5rem;">
                 <button class="btn" id="btn-phase1-next" onclick="submitPhase1()" disabled>
+                    Submit Answer <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Phase 1B: Intake (Client C2) -->
+        <div id="screen-phase1b" class="card" style="display: none;">
+            <h2>Phase 1B: Client C2 Intake Protocol</h2>
+            <p>
+                Client C2 has assigned a new task via WhatsApp. You performed the Triad Check (Video, OST, Deadline) and
+                noticed that the video contains a significant amount of a foreign language. The provided ETA is very
+                tight.
+                What is the correct protocol?
+            </p>
+
+            <div class="whatsapp-container">
+                <div class="whatsapp-header">
+                    <div class="whatsapp-user-info">
+                        <div class="whatsapp-avatar" style="background-color: var(--secondary);">C2</div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.9rem;">Client C2 Notifications</div>
+                            <div class="whatsapp-status">Client is typing...</div>
+                        </div>
+                    </div>
+                    <div class="whatsapp-timer" id="whatsappTimer1b">Time Left: 01:00</div>
+                </div>
+                <div class="whatsapp-body">
+                    <div class="whatsapp-message received">
+                        Hey team, new Spanish task assigned. Video link and OST are in the folder. ETA is 2 hours.
+                        <div class="whatsapp-message-time">4:20 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Choose the best next action:</label>
+                <div class="option-list">
+                    <div class="option-item" onclick="selectPhase1bOption(0)" id="p1b-opt-0">
+                        <i class="far fa-circle" id="p1b-ico-0"></i>
+                        <span>Accept the task immediately without mentioning the foreign language to maintain Zero-Delay
+                            status.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase1bOption(1)" id="p1b-opt-1">
+                        <i class="far fa-circle" id="p1b-ico-1"></i>
+                        <span>Check if translation can be done within the ETA. If not, request a time limit extension
+                            immediately to ensure the job is done correctly.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase1bOption(2)" id="p1b-opt-2">
+                        <i class="far fa-circle" id="p1b-ico-2"></i>
+                        <span>Reject the task immediately since foreign languages are never translated.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-box" id="phase1b-feedback"></div>
+
+            <div style="text-align: right; margin-top: 1.5rem;">
+                <button class="btn" id="btn-phase1b-next" onclick="submitPhase1b()" disabled>
                     Submit Answer <i class="fas fa-check"></i>
                 </button>
             </div>
@@ -851,7 +909,8 @@
         <div id="screen-phase4" class="card" style="display: none;">
             <h2>Phase 4: Issue Resolution</h2>
             <p>
-                What would you do if you notice when translator is missing out certain portion of speech while working on live doc?
+                What would you do if you notice translator is missing out certain portion of speech while working
+                on live doc?
             </p>
 
             <div class="form-group">
@@ -866,11 +925,11 @@
                     </div>
                     <div class="option-item" onclick="selectPhase4Option(2)" id="p4-opt-2">
                         <i class="far fa-circle" id="p4-ico-2"></i>
-                        <span>Ignore the missing portion since the translator might add it later before the deadline.</span>
+                        <span>Ignore the missing portion. </span>
                     </div>
                     <div class="option-item" onclick="selectPhase4Option(3)" id="p4-opt-3">
                         <i class="far fa-circle" id="p4-ico-3"></i>
-                        <span>Delete the document and ask the translator to start over from scratch.</span>
+                        <span>Add comment without informing to senior.</span>
                     </div>
                 </div>
             </div>
@@ -880,6 +939,188 @@
             <div style="text-align: right; margin-top: 1.5rem;">
                 <button class="btn" id="btn-phase4-next" onclick="submitPhase4()" disabled>
                     Submit Answer <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Phase 5: Timezone Alignment Check -->
+        <div id="screen-phase5" class="card" style="display: none;">
+            <h2>Phase 5: Timezone Alignment Check</h2>
+            <p>
+                A client assigns a high-priority task with a 3-hour deadline, but the only available translator for this
+                language is in a timezone with a 7-hour difference and is currently offline. According to protocol, what
+                should you do?
+            </p>
+
+            <div class="form-group">
+                <div class="option-list">
+                    <div class="option-item" onclick="selectPhase5Option(0)" id="p5-opt-0">
+                        <i class="far fa-circle" id="p5-ico-0"></i>
+                        <span>Decline the task immediately without notifying the client or senior management to avoid
+                            missing the deadline.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase5Option(1)" id="p5-opt-1">
+                        <i class="far fa-circle" id="p5-ico-1"></i>
+                        <span>Accept the task and hope the translator wakes up or responds in time to complete the
+                            work.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase5Option(2)" id="p5-opt-2">
+                        <i class="far fa-circle" id="p5-ico-2"></i>
+                        <span>Consult with a senior manager to negotiate a realistic ETA with the client based on
+                            timezone conflict and quantity of work before starting execution.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase5Option(3)" id="p5-opt-3">
+                        <i class="far fa-circle" id="p5-ico-3"></i>
+                        <span>Assign the task to a machine translation tool to ensure delivery within the 3-hour
+                            window.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-box" id="phase5-feedback"></div>
+
+            <div style="text-align: right; margin-top: 1.5rem;">
+                <button class="btn" id="btn-phase5-next" onclick="submitPhase5()" disabled>
+                    Submit Answer <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Phase 6: Timezone-Aware Resource Sourcing -->
+        <div id="screen-phase6" class="card" style="display: none;">
+            <h2>Phase 6: Resource Sourcing Awareness</h2>
+            <p>
+                When a new task is received from a client, when should the Project Manager or Associate assess timezone
+                differences and resource availability?
+            </p>
+
+            <div class="form-group">
+                <div class="option-list">
+                    <div class="option-item" onclick="selectPhase6Option(0)" id="p6-opt-0">
+                        <i class="far fa-circle" id="p6-ico-0"></i>
+                        <span>Only after the client follows up to ask for a status update on the project.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase6Option(1)" id="p6-opt-1">
+                        <i class="far fa-circle" id="p6-ico-1"></i>
+                        <span>Be fully aware of resource availability across different timezones before accepting the
+                            task to ensure proper assignment and timely completion.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase6Option(2)" id="p6-opt-2">
+                        <i class="far fa-circle" id="p6-ico-2"></i>
+                        <span>After the deadline has already passed, if the original translator has not submitted the
+                            file.</span>
+                    </div>
+                    <div class="option-item" onclick="selectPhase6Option(3)" id="p6-opt-3">
+                        <i class="far fa-circle" id="p6-ico-3"></i>
+                        <span>Assume all translators are in the same local timezone as the Project Manager.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-box" id="phase6-feedback"></div>
+
+            <div style="text-align: right; margin-top: 1.5rem;">
+                <button class="btn" id="btn-phase6-next" onclick="submitPhase6()" disabled>
+                    Submit Answer <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Phase 7: Knowledge Check Section -->
+        <div id="screen-phase7" class="card" style="display: none;">
+            <h2>Phase 7: Knowledge Check (Client Approaches)</h2>
+            <p>
+                Test your understanding of the different submission protocols for Client C1 and Client C2.
+                Answer the questions below to test your knowledge.
+            </p>
+
+            <div class="quiz-container" style="display: flex; flex-direction: column; gap: 20px;">
+
+                <!-- Question 1 -->
+                <div class="quiz-question-card"
+                    style="background: var(--bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem;">1. Which client
+                        strictly requires that NO translator details (e.g., Translator Name) be shared?</h4>
+                    <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button
+                            onclick="checkAnswer(this, true, 'Correct! Client C1 has strict privacy rules regarding translator details.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
+                            C1</button>
+                        <button
+                            onclick="checkAnswer(this, false, 'Incorrect. Client C2 actually requires the Translator Name in data entry.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
+                            C2</button>
+                        <button onclick="checkAnswer(this, false, 'Incorrect.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Both
+                            Clients</button>
+                    </div>
+                    <div class="quiz-feedback"
+                        style="margin-top: 1rem; font-size: 0.9rem; font-weight: 600; display: none;"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-question-card"
+                    style="background: var(--bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem;">2. What is the correct
+                        timestamp format for Client C1?</h4>
+                    <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button onclick="checkAnswer(this, false, 'Incorrect. That is the format for Client C2.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">00:00:00
+                            strictly</button>
+                        <button
+                            onclick="checkAnswer(this, true, 'Correct! Client C1 uses hh:mm:ss, 00h:00m:00s strictly.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">hh:mm:ss,
+                            00h:00m:00s strictly</button>
+                        <button onclick="checkAnswer(this, false, 'Incorrect.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">MM:SS
+                            strictly</button>
+                    </div>
+                    <div class="quiz-feedback"
+                        style="margin-top: 1rem; font-size: 0.9rem; font-weight: 600; display: none;"></div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-question-card"
+                    style="background: var(--bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem;">3. For which client
+                        must you provide Origin Text + Language + Context in the Annotations?</h4>
+                    <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button
+                            onclick="checkAnswer(this, true, 'Correct! This is a mandatory annotation format for Client C1.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
+                            C1</button>
+                        <button
+                            onclick="checkAnswer(this, false, 'Incorrect. Client C2 requires contextual notes but not specifically this format.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
+                            C2</button>
+                    </div>
+                    <div class="quiz-feedback"
+                        style="margin-top: 1rem; font-size: 0.9rem; font-weight: 600; display: none;"></div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-question-card"
+                    style="background: var(--bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem;">4. How is the final
+                        handover conducted for Client C2?</h4>
+                    <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button onclick="checkAnswer(this, false, 'Incorrect.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Via
+                            Email attachment</button>
+                        <button
+                            onclick="checkAnswer(this, true, 'Correct! Client C2 requires Direct Folder Handover via designated project link.')"
+                            style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Direct
+                            Folder Handover via designated project link</button>
+                    </div>
+                    <div class="quiz-feedback"
+                        style="margin-top: 1rem; font-size: 0.9rem; font-weight: 600; display: none;"></div>
+                </div>
+
+            </div>
+
+            <div style="text-align: right; margin-top: 2.5rem;">
+                <button class="btn" onclick="submitPhase7()">
+                    Calculate & Submit Score <i class="fas fa-poll"></i>
                 </button>
             </div>
         </div>
@@ -948,6 +1189,18 @@
         let p2Selected = null;
         let p3Selected = null;
         let p4Selected = null;
+        let p5Selected = null;
+        let p6Selected = null;
+        let p1bSelected = null;
+
+        let p1Correct = false;
+        let p1bCorrect = false;
+        let p2Correct = false;
+        let p3Correct = false;
+        let p4Correct = false;
+        let p5Correct = false;
+        let p6Correct = false;
+
         let finalScore = 0;
         let secondsLeft = 30; // 30 seconds
 
@@ -1012,8 +1265,8 @@
         // Update progress bar
         function updateProgress(step, label) {
             document.getElementById('progress-phase-name').innerText = label;
-            document.getElementById('progress-step-text').innerText = `Step ${step} of 4`;
-            const fillPct = ((step - 1) / 4) * 100;
+            document.getElementById('progress-step-text').innerText = `Step ${step} of 8`;
+            const fillPct = ((step - 1) / 8) * 100;
             document.getElementById('progressBarFill').style.width = `${fillPct}%`;
         }
 
@@ -1022,23 +1275,39 @@
 
             // Hide all phases
             document.getElementById('screen-phase1').style.display = 'none';
+            document.getElementById('screen-phase1b').style.display = 'none';
             document.getElementById('screen-phase2').style.display = 'none';
             document.getElementById('screen-phase3').style.display = 'none';
             document.getElementById('screen-phase4').style.display = 'none';
+            document.getElementById('screen-phase5').style.display = 'none';
+            document.getElementById('screen-phase6').style.display = 'none';
+            document.getElementById('screen-phase7').style.display = 'none';
 
             if (phase === 1) {
                 document.getElementById('screen-phase1').style.display = 'block';
                 updateProgress(1, 'Phase 1: Intake Test');
                 startTimer();
+            } else if (phase === '1b') {
+                document.getElementById('screen-phase1b').style.display = 'block';
+                updateProgress(2, 'Phase 1B: Client C2 Intake');
             } else if (phase === 2) {
                 document.getElementById('screen-phase2').style.display = 'block';
-                updateProgress(2, 'Phase 2: Tracking Check');
+                updateProgress(3, 'Phase 2: Tracking Check');
             } else if (phase === 3) {
                 document.getElementById('screen-phase3').style.display = 'block';
-                updateProgress(3, 'Phase 3: Quality Control');
+                updateProgress(4, 'Phase 3: Quality Control');
             } else if (phase === 4) {
                 document.getElementById('screen-phase4').style.display = 'block';
-                updateProgress(4, 'Phase 4: Feedback Check');
+                updateProgress(5, 'Phase 4: Feedback Check');
+            } else if (phase === 5) {
+                document.getElementById('screen-phase5').style.display = 'block';
+                updateProgress(6, 'Phase 5: Timezone Alignment Check');
+            } else if (phase === 6) {
+                document.getElementById('screen-phase6').style.display = 'block';
+                updateProgress(7, 'Phase 6: Resource Sourcing Check');
+            } else if (phase === 7) {
+                document.getElementById('screen-phase7').style.display = 'block';
+                updateProgress(8, 'Phase 7: Knowledge Check');
             }
         }
 
@@ -1070,14 +1339,15 @@
             if (timeExpired) {
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> RESPONSE TIMED OUT</h4>
                                       <p style="margin: 0.5rem 0 0 0;">Lingo Chaps requires an <b>Instant Reply</b> in WhatsApp/Email groups within 2-5 minutes. You failed to respond in time.</p>`;
-                finalScore += 0;
+                p1Correct = false;
             } else if (p1Selected === 2) {
                 feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
                                       <p style="margin: 0.5rem 0 0 0;">Excellent! Confirming immediately or checking availability with timezone awareness keeps client communication prompt and accurate.</p>`;
-                finalScore += 25;
+                p1Correct = true;
             } else {
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
                                       <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Waiting for translators violates the 5-Minute rule. Conversely, a general acknowledgment without confirming or checking resource availability and timezone difference is not optimal.</p>`;
+                p1Correct = false;
             }
 
             // Highlight answer states
@@ -1090,6 +1360,55 @@
 
             // Move to Next button styling
             const btn = document.getElementById('btn-phase1-next');
+            btn.removeAttribute('disabled');
+            btn.innerHTML = `Proceed to Phase 1B <i class="fas fa-arrow-right"></i>`;
+            btn.onclick = () => showPhase('1b');
+        }
+
+        // Phase 1B Option Select
+        function selectPhase1bOption(index) {
+            p1bSelected = index;
+            for (let i = 0; i < 3; i++) {
+                const opt = document.getElementById(`p1b-opt-${i}`);
+                const ico = document.getElementById(`p1b-ico-${i}`);
+                if (i === index) {
+                    opt.classList.add('selected');
+                    ico.classList.replace('far', 'fas');
+                    ico.classList.replace('fa-circle', 'fa-check-circle');
+                } else {
+                    opt.classList.remove('selected');
+                    ico.classList.replace('fas', 'far');
+                    ico.classList.replace('fa-check-circle', 'fa-circle');
+                }
+            }
+            document.getElementById('btn-phase1b-next').removeAttribute('disabled');
+        }
+
+        // Submit Phase 1B
+        function submitPhase1b() {
+            const feedback = document.getElementById('phase1b-feedback');
+            feedback.style.display = 'block';
+
+            if (p1bSelected === 1) {
+                feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
+                                      <p style="margin: 0.5rem 0 0 0;">Excellent! Checking ETA feasibility against the foreign language and immediately requesting a time limit extension ensures quality.</p>`;
+                p1bCorrect = true;
+            } else {
+                feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
+                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Accepting immediately ignores the language difficulty, and rejecting outright without evaluating feasibility violates protocol.</p>`;
+                p1bCorrect = false;
+            }
+
+            // Highlight answer states
+            for (let i = 0; i < 3; i++) {
+                const opt = document.getElementById(`p1b-opt-${i}`);
+                opt.style.pointerEvents = 'none';
+                if (i === 1) opt.classList.add('correct');
+                else if (i === p1bSelected) opt.classList.add('incorrect');
+            }
+
+            // Move to Next button styling
+            const btn = document.getElementById('btn-phase1b-next');
             btn.removeAttribute('disabled');
             btn.innerHTML = `Proceed to Phase 2 <i class="fas fa-arrow-right"></i>`;
             btn.onclick = () => showPhase(2);
@@ -1119,7 +1438,7 @@
             if (p2Selected === 1) {
                 feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
                                       <p style="margin: 0.5rem 0 0 0;">Spot on! Row 1 (Spanish) is the only row that correctly follows all operational and naming guidelines, with complete assignment logs and correct file naming/durations (<code>Spanish_00:00:00-00:05:00.docx</code>).</p>`;
-                finalScore += 25;
+                p2Correct = true;
             } else {
                 let errorText = "";
                 if (p2Selected === 3) {
@@ -1129,6 +1448,7 @@
                 }
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ROW SELECTED</h4>
                                       <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> ${errorText} Row 1 (Spanish) is the only row with correct format and tracking logs.</p>`;
+                p2Correct = false;
             }
 
             // Highlight rows
@@ -1176,10 +1496,11 @@
             if (p3Selected === 0) {
                 feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
                                       <p style="margin: 0.5rem 0 0 0;">Spot on! You must proactively track progress, manage metadata, and keep communication notes updated.</p>`;
-                finalScore += 25;
+                p3Correct = true;
             } else {
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
                                       <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Waiting or ignoring progress tracking leads to delays and missed quality checks.</p>`;
+                p3Correct = false;
             }
 
             for (let i = 0; i < 4; i++) {
@@ -1221,10 +1542,11 @@
             if (p4Selected === 0) {
                 feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
                                       <p style="margin: 0.5rem 0 0 0;">Excellent! Commenting on the missing portion and involving a senior ensures the issue is tracked and communicated professionally.</p>`;
-                finalScore += 25;
+                p4Correct = true;
             } else {
                 feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
                                       <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Ignoring the issue, fixing it silently, or taking destructive action violates protocol.</p>`;
+                p4Correct = false;
             }
 
             for (let i = 0; i < 4; i++) {
@@ -1235,14 +1557,150 @@
             }
 
             const btn = document.getElementById('btn-phase4-next');
-            btn.innerHTML = `Calculate & Submit Score <i class="fas fa-poll"></i>`;
-            btn.onclick = () => showResults();
+            btn.innerHTML = `Proceed to Phase 5 <i class="fas fa-arrow-right"></i>`;
+            btn.onclick = () => showPhase(5);
+        }
+
+        // Phase 5 Option Select
+        function selectPhase5Option(index) {
+            p5Selected = index;
+            for (let i = 0; i < 4; i++) {
+                const opt = document.getElementById(`p5-opt-${i}`);
+                const ico = document.getElementById(`p5-ico-${i}`);
+                if (i === index) {
+                    opt.classList.add('selected');
+                    ico.classList.replace('far', 'fas');
+                    ico.classList.replace('fa-circle', 'fa-check-circle');
+                } else {
+                    opt.classList.remove('selected');
+                    ico.classList.replace('fas', 'far');
+                    ico.classList.replace('fa-check-circle', 'fa-circle');
+                }
+            }
+            document.getElementById('btn-phase5-next').removeAttribute('disabled');
+        }
+
+        // Submit Phase 5
+        function submitPhase5() {
+            const feedback = document.getElementById('phase5-feedback');
+            feedback.style.display = 'block';
+
+            if (p5Selected === 2) {
+                feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
+                                      <p style="margin: 0.5rem 0 0 0;">Spot on! Under Scenario B, when there is a timezone conflict or insufficient ETA, you must negotiate a realistic ETA based on quantity of work, but always consult with a senior manager first before rejecting/declining.</p>`;
+                p5Correct = true;
+            } else {
+                feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
+                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> Standard protocol dictates that you must negotiate a realistic ETA with the client based on timezone conflict and quantity of work, and consult with a senior manager before making any rejection decisions.</p>`;
+                p5Correct = false;
+            }
+
+            for (let i = 0; i < 4; i++) {
+                const opt = document.getElementById(`p5-opt-${i}`);
+                opt.style.pointerEvents = 'none';
+                if (i === 2) opt.classList.add('correct');
+                else if (i === p5Selected) opt.classList.add('incorrect');
+            }
+
+            const btn = document.getElementById('btn-phase5-next');
+            btn.innerHTML = `Proceed to Phase 6 <i class="fas fa-arrow-right"></i>`;
+            btn.onclick = () => showPhase(6);
+        }
+
+        // Phase 6 Option Select
+        function selectPhase6Option(index) {
+            p6Selected = index;
+            for (let i = 0; i < 4; i++) {
+                const opt = document.getElementById(`p6-opt-${i}`);
+                const ico = document.getElementById(`p6-ico-${i}`);
+                if (i === index) {
+                    opt.classList.add('selected');
+                    ico.classList.replace('far', 'fas');
+                    ico.classList.replace('fa-circle', 'fa-check-circle');
+                } else {
+                    opt.classList.remove('selected');
+                    ico.classList.replace('fas', 'far');
+                    ico.classList.replace('fa-check-circle', 'fa-circle');
+                }
+            }
+            document.getElementById('btn-phase6-next').removeAttribute('disabled');
+        }
+
+        // Submit Phase 6
+        function submitPhase6() {
+            const feedback = document.getElementById('phase6-feedback');
+            feedback.style.display = 'block';
+
+            if (p6Selected === 1) {
+                feedback.innerHTML = `<h4 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> CORRECT</h4>
+                                      <p style="margin: 0.5rem 0 0 0;">Excellent! You must be fully aware of resource availability across different timezones before accepting the task to ensure proper assignment and timely completion.</p>`;
+                p6Correct = true;
+            } else {
+                feedback.innerHTML = `<h4 style="color: var(--danger);"><i class="fas fa-times-circle"></i> INCORRECT ACTION</h4>
+                                      <p style="margin: 0.5rem 0 0 0;"><b>Incorrect option selected:</b> You must be fully aware of resource availability across different timezones before accepting the task, ensuring proper assignment and avoiding last-minute delays.</p>`;
+                p6Correct = false;
+            }
+
+            for (let i = 0; i < 4; i++) {
+                const opt = document.getElementById(`p6-opt-${i}`);
+                opt.style.pointerEvents = 'none';
+                if (i === 1) opt.classList.add('correct');
+                else if (i === p6Selected) opt.classList.add('incorrect');
+            }
+
+            // Calculate final score before showing results
+            let correctAnswers = 0;
+            if (p1Correct) correctAnswers++;
+            if (p1bCorrect) correctAnswers++;
+            if (p2Correct) correctAnswers++;
+            if (p3Correct) correctAnswers++;
+            if (p4Correct) correctAnswers++;
+            if (p5Correct) correctAnswers++;
+            if (p6Correct) correctAnswers++;
+
+            finalScore = Math.round((correctAnswers / 7) * 100);
+
+            const btn = document.getElementById('btn-phase6-next');
+            btn.innerHTML = `Proceed to Phase 7 <i class="fas fa-arrow-right"></i>`;
+            btn.onclick = () => showPhase(7);
+        }
+
+        function submitPhase7() {
+            showResults();
+        }
+
+        function checkAnswer(btn, isCorrect, feedbackText) {
+            const card = btn.closest('.quiz-question-card');
+            const buttons = card.querySelectorAll('button');
+            const feedback = card.querySelector('.quiz-feedback');
+
+            buttons.forEach(b => {
+                b.style.borderColor = 'var(--border)';
+                b.style.background = 'var(--bg)';
+                b.style.color = 'inherit';
+            });
+
+            feedback.style.display = 'block';
+            feedback.innerText = feedbackText;
+
+            if (isCorrect) {
+                btn.style.borderColor = 'var(--secondary)';
+                btn.style.background = 'rgba(16, 185, 129, 0.1)';
+                btn.style.color = '#065f46';
+                feedback.style.color = 'var(--secondary)';
+            } else {
+                btn.style.borderColor = 'var(--danger)';
+                btn.style.background = 'rgba(239, 68, 68, 0.1)';
+                btn.style.color = '#991b1b';
+                feedback.style.color = 'var(--danger)';
+            }
         }
 
         // Show Results Screen
         function showResults() {
             document.getElementById('assessment-progress').style.display = 'none';
-            document.getElementById('screen-phase4').style.display = 'none';
+            document.getElementById('screen-phase6').style.display = 'none';
+            document.getElementById('screen-phase7').style.display = 'none';
             document.getElementById('screen-results').style.display = 'block';
 
             const scoreCircle = document.getElementById('scoreCircle');
@@ -1289,6 +1747,11 @@
                 "Reply immediately: 'Received! We will confirm the ETA in 5-10 minutes.'",
                 "Confirm immediately: 'Yes, we can work on it, please assign. OR let me check the resource availability (in case there is a timezone difference).' (Correct)"
             ];
+            const p1bAnswers = [
+                "Accept the task immediately without mentioning the foreign language to maintain Zero-Delay status.",
+                "Check if translation can be done within the ETA. If not, request a time limit extension immediately. (Correct)",
+                "Reject the task immediately since foreign languages are never translated."
+            ];
             const p2Answers = [
                 "", // 1-indexed
                 "Row 1 (Spanish - Correct Format) (Correct)",
@@ -1307,13 +1770,28 @@
                 "Ignore the missing portion since the translator might add it later before the deadline.",
                 "Delete the document and ask the translator to start over from scratch."
             ];
+            const p5Answers = [
+                "Decline the task immediately without notifying the client or senior management to avoid missing the deadline.",
+                "Accept the task and hope the translator wakes up or responds in time to complete the work.",
+                "Consult with a senior manager to negotiate a realistic ETA with the client based on timezone conflict and quantity of work before starting execution. (Correct)",
+                "Assign the task to a machine translation tool to ensure delivery within the 3-hour window."
+            ];
+            const p6Answers = [
+                "Only after the client follows up to ask for a status update on the project.",
+                "Be fully aware of resource availability across different timezones before accepting the task to ensure proper assignment and timely completion. (Correct)",
+                "After the deadline has already passed, if the original translator has not submitted the file.",
+                "Assume all translators are in the same local timezone as the Project Manager."
+            ];
 
             const p1Text = p1Selected === null ? "Timed Out" : p1Answers[p1Selected];
+            const p1bText = p1bSelected === null ? "Timed Out/None" : p1bAnswers[p1bSelected];
             const p2Text = p2Selected === null ? "None selected" : p2Answers[p2Selected];
             const p3Text = p3Selected === null ? "None selected" : p3Answers[p3Selected];
             const p4Text = p4Selected === null ? "None selected" : p4Answers[p4Selected];
+            const p5Text = p5Selected === null ? "None selected" : p5Answers[p5Selected];
+            const p6Text = p6Selected === null ? "None selected" : p6Answers[p6Selected];
 
-            const detailedFeedback = `Phase 1 (Intake): Selected "${p1Text}" | Phase 2 (Tracking): Flagged "${p2Text}" | Phase 3 (QC): Flagged [${p3Text}] | Phase 4 (Feedback): Selected "${p4Text}"`;
+            const detailedFeedback = `Phase 1 (Intake): Selected "${p1Text}" | Phase 1B (C2 Intake): Selected "${p1bText}" | Phase 2 (Tracking): Flagged "${p2Text}" | Phase 3 (QC): Flagged [${p3Text}] | Phase 4 (Feedback): Selected "${p4Text}" | Phase 5 (Timezone): Selected "${p5Text}" | Phase 6 (Sourcing): Selected "${p6Text}"`;
 
             const payload = {
                 name: userName,
