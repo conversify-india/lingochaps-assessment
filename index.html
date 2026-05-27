@@ -589,15 +589,53 @@
             margin: 0 auto 1.5rem;
             transform: rotate(-10deg);
         }
+
+        /* Global Countdown Timer */
+        .global-timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .global-timer.warning {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.2);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <a href="youtube_project_guide.html" class="logo">
+        <a href="https://conversify-india.github.io/LINGOCHAPS-Docs/youtube_project_guide.html" class="logo">
             <i class="fas fa-gavel"></i>
             <span>Lingo Chaps Reviewer Hub</span>
         </a>
+        <div id="global-timer-container" class="global-timer" style="display: none;">
+            <i class="fas fa-clock"></i>
+            <span id="globalTimerDisplay">10:00</span>
+        </div>
         <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()">
             <i class="fas fa-moon"></i>
         </button>
@@ -621,8 +659,7 @@
                     Guidelines:</h3>
                 <ul
                     style="list-style-type: none; font-size: 0.95rem; display: flex; flex-direction: column; gap: 10px;">
-                    <li><i class="fas fa-clock" style="color: var(--primary);"></i> <b>Time limits:</b> Intake phase
-                        tests the WhatsApp 1-Minute response speed.</li>
+                    <li><i class="fas fa-clock" style="color: var(--primary);"></i> <b>Time limits:</b> Intake phase tests the WhatsApp prompt response speed. You have <b>10 minutes</b> to complete the entire assessment.</li>
                     <li><i class="fas fa-check-circle" style="color: var(--secondary);"></i> <b>Passing Grade:</b> Must
                         correctly audit all workflow violations to receive certificate.</li>
                     <li><i class="fas fa-database" style="color: var(--primary);"></i> <b>Result Logged:</b> Your score
@@ -1043,18 +1080,18 @@
                         strictly requires that NO translator details (e.g., Translator Name) be shared?</h4>
                     <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
                         <button
-                            onclick="checkAnswer(this, true, 'Correct! Client C1 has strict privacy rules regarding translator details.')"
+                            onclick="selectPhase7Answer(1, 0, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
                             C1</button>
                         <button
-                            onclick="checkAnswer(this, false, 'Incorrect. Client C2 actually requires the Translator Name in data entry.')"
+                            onclick="selectPhase7Answer(1, 1, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
                             C2</button>
-                        <button onclick="checkAnswer(this, false, 'Incorrect.')"
+                        <button onclick="selectPhase7Answer(1, 2, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Both
                             Clients</button>
                     </div>
-                    <div class="quiz-feedback"
+                    <div class="quiz-feedback" id="q1-feedback"
                         style="margin-top: 1rem; font-size: 0.9rem; font-weight: 600; display: none;"></div>
                 </div>
 
@@ -1064,18 +1101,18 @@
                     <h4 style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem;">2. What is the correct
                         timestamp format for Client C1?</h4>
                     <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button onclick="checkAnswer(this, false, 'Incorrect. That is the format for Client C2.')"
+                        <button onclick="selectPhase7Answer(2, 0, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">00:00:00
                             strictly</button>
                         <button
-                            onclick="checkAnswer(this, true, 'Correct! Client C1 uses hh:mm:ss, 00h:00m:00s strictly.')"
+                            onclick="selectPhase7Answer(2, 1, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">hh:mm:ss,
                             00h:00m:00s strictly</button>
-                        <button onclick="checkAnswer(this, false, 'Incorrect.')"
+                        <button onclick="selectPhase7Answer(2, 2, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">MM:SS
                             strictly</button>
                     </div>
-                    <div class="quiz-feedback"
+                    <div class="quiz-feedback" id="q2-feedback"
                         style="margin-top: 1rem; font-size: 0.9rem; font-weight: 600; display: none;"></div>
                 </div>
 
@@ -1086,15 +1123,15 @@
                         must you provide Origin Text + Language + Context in the Annotations?</h4>
                     <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
                         <button
-                            onclick="checkAnswer(this, true, 'Correct! This is a mandatory annotation format for Client C1.')"
+                            onclick="selectPhase7Answer(3, 0, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
                             C1</button>
                         <button
-                            onclick="checkAnswer(this, false, 'Incorrect. Client C2 requires contextual notes but not specifically this format.')"
+                            onclick="selectPhase7Answer(3, 1, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
                             C2</button>
                     </div>
-                    <div class="quiz-feedback"
+                    <div class="quiz-feedback" id="q3-feedback"
                         style="margin-top: 1rem; font-size: 0.9rem; font-weight: 600; display: none;"></div>
                 </div>
 
@@ -1104,23 +1141,23 @@
                     <h4 style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem;">4. How is the final
                         handover conducted for Client C2?</h4>
                     <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button onclick="checkAnswer(this, false, 'Incorrect.')"
+                        <button onclick="selectPhase7Answer(4, 0, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Via
                             Email attachment</button>
                         <button
-                            onclick="checkAnswer(this, true, 'Correct! Client C2 requires Direct Folder Handover via designated project link.')"
+                            onclick="selectPhase7Answer(4, 1, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Direct
                             Folder Handover via designated project link</button>
                     </div>
-                    <div class="quiz-feedback"
+                    <div class="quiz-feedback" id="q4-feedback"
                         style="margin-top: 1rem; font-size: 0.9rem; font-weight: 600; display: none;"></div>
                 </div>
 
             </div>
 
             <div style="text-align: right; margin-top: 2.5rem;">
-                <button class="btn" onclick="submitPhase7()">
-                    Calculate & Submit Score <i class="fas fa-poll"></i>
+                <button class="btn" id="btn-phase7-submit" onclick="submitPhase7()" disabled>
+                    Submit Answers <i class="fas fa-check"></i>
                 </button>
             </div>
         </div>
@@ -1193,6 +1230,16 @@
         let p6Selected = null;
         let p1bSelected = null;
 
+        let p7Q1Selected = null;
+        let p7Q2Selected = null;
+        let p7Q3Selected = null;
+        let p7Q4Selected = null;
+
+        let globalTimerInterval = null;
+        let globalSecondsLeft = 600; // 10 minutes
+        let globalTimerExpired = false;
+        let phase7Submitted = false;
+
         let p1Correct = false;
         let p1bCorrect = false;
         let p2Correct = false;
@@ -1236,7 +1283,61 @@
             userName = nameInput;
             document.getElementById('screen-welcome').style.display = 'none';
             document.getElementById('assessment-progress').style.display = 'block';
+            document.getElementById('global-timer-container').style.display = 'flex';
+            startGlobalTimer();
             showPhase(1);
+        }
+
+        // Global 10-Minute Timer Logic
+        function startGlobalTimer() {
+            globalSecondsLeft = 600;
+            const timerContainer = document.getElementById('global-timer-container');
+            const timerDisplay = document.getElementById('globalTimerDisplay');
+            
+            globalTimerInterval = setInterval(() => {
+                globalSecondsLeft--;
+                
+                let mins = Math.floor(globalSecondsLeft / 60);
+                let secs = globalSecondsLeft % 60;
+                timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                if (globalSecondsLeft <= 60) {
+                    if (!timerContainer.classList.contains('warning')) {
+                        timerContainer.classList.add('warning');
+                    }
+                }
+                
+                if (globalSecondsLeft <= 0) {
+                    clearInterval(globalTimerInterval);
+                    globalTimerExpired = true;
+                    alert("Assessment time has expired! Your score will be submitted automatically.");
+                    autoSubmitQuiz();
+                }
+            }, 1000);
+        }
+
+        function autoSubmitQuiz() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // Calculate score with whatever is answered
+            let correctAnswers = 0;
+            if (p1Correct) correctAnswers++;
+            if (p1bCorrect) correctAnswers++;
+            if (p2Correct) correctAnswers++;
+            if (p3Correct) correctAnswers++;
+            if (p4Correct) correctAnswers++;
+            if (p5Correct) correctAnswers++;
+            if (p6Correct) correctAnswers++;
+            
+            if (p7Q1Selected === 0) correctAnswers++;
+            if (p7Q2Selected === 1) correctAnswers++;
+            if (p7Q3Selected === 0) correctAnswers++;
+            if (p7Q4Selected === 0) correctAnswers++;
+            
+            finalScore = Math.round((correctAnswers / 11) * 100);
+            showResults();
         }
 
         // Timer for Phase 1
@@ -1648,25 +1749,163 @@
                 else if (i === p6Selected) opt.classList.add('incorrect');
             }
 
-            // Calculate final score before showing results
-            let correctAnswers = 0;
-            if (p1Correct) correctAnswers++;
-            if (p1bCorrect) correctAnswers++;
-            if (p2Correct) correctAnswers++;
-            if (p3Correct) correctAnswers++;
-            if (p4Correct) correctAnswers++;
-            if (p5Correct) correctAnswers++;
-            if (p6Correct) correctAnswers++;
-
-            finalScore = Math.round((correctAnswers / 7) * 100);
-
             const btn = document.getElementById('btn-phase6-next');
             btn.innerHTML = `Proceed to Phase 7 <i class="fas fa-arrow-right"></i>`;
             btn.onclick = () => showPhase(7);
         }
 
+        // Phase 7 Option Selection
+        function selectPhase7Answer(qIndex, optIndex, btn) {
+            if (qIndex === 1) p7Q1Selected = optIndex;
+            else if (qIndex === 2) p7Q2Selected = optIndex;
+            else if (qIndex === 3) p7Q3Selected = optIndex;
+            else if (qIndex === 4) p7Q4Selected = optIndex;
+
+            const card = btn.closest('.quiz-question-card');
+            const buttons = card.querySelectorAll('.quiz-options button');
+            buttons.forEach((b, idx) => {
+                if (idx === optIndex) {
+                    b.style.borderColor = 'var(--primary)';
+                    b.style.background = 'rgba(79, 70, 229, 0.1)';
+                    b.style.color = 'var(--primary)';
+                    b.style.fontWeight = '600';
+                } else {
+                    b.style.borderColor = 'var(--border)';
+                    b.style.background = 'var(--bg)';
+                    b.style.color = 'inherit';
+                    b.style.fontWeight = '500';
+                }
+            });
+
+            if (p7Q1Selected !== null && p7Q2Selected !== null && p7Q3Selected !== null && p7Q4Selected !== null) {
+                document.getElementById('btn-phase7-submit').removeAttribute('disabled');
+            }
+        }
+
         function submitPhase7() {
-            showResults();
+            if (!phase7Submitted) {
+                phase7Submitted = true;
+                
+                // Disable further selection
+                const allButtons = document.querySelectorAll('.quiz-options button');
+                allButtons.forEach(b => {
+                    b.style.pointerEvents = 'none';
+                });
+
+                // Evaluate Q1
+                const q1Feedback = document.getElementById('q1-feedback');
+                q1Feedback.style.display = 'block';
+                const q1Buttons = q1Feedback.closest('.quiz-question-card').querySelectorAll('.quiz-options button');
+                q1Buttons.forEach((b, idx) => {
+                    if (idx === 0) { // Correct: Client C1
+                        b.style.borderColor = 'var(--secondary)';
+                        b.style.background = 'rgba(16, 185, 129, 0.1)';
+                        b.style.color = '#065f46';
+                    } else if (idx === p7Q1Selected) {
+                        b.style.borderColor = 'var(--danger)';
+                        b.style.background = 'rgba(239, 68, 68, 0.1)';
+                        b.style.color = '#991b1b';
+                    }
+                });
+                if (p7Q1Selected === 0) {
+                    q1Feedback.innerText = "Correct! Client C1 has strict privacy rules regarding translator details.";
+                    q1Feedback.style.color = 'var(--secondary)';
+                } else {
+                    q1Feedback.innerText = "Incorrect. Client C2 actually requires the Translator Name in data entry.";
+                    q1Feedback.style.color = 'var(--danger)';
+                }
+
+                // Evaluate Q2
+                const q2Feedback = document.getElementById('q2-feedback');
+                q2Feedback.style.display = 'block';
+                const q2Buttons = q2Feedback.closest('.quiz-question-card').querySelectorAll('.quiz-options button');
+                q2Buttons.forEach((b, idx) => {
+                    if (idx === 1) { // Correct: hh:mm:ss, 00h:00m:00s strictly
+                        b.style.borderColor = 'var(--secondary)';
+                        b.style.background = 'rgba(16, 185, 129, 0.1)';
+                        b.style.color = '#065f46';
+                    } else if (idx === p7Q2Selected) {
+                        b.style.borderColor = 'var(--danger)';
+                        b.style.background = 'rgba(239, 68, 68, 0.1)';
+                        b.style.color = '#991b1b';
+                    }
+                });
+                if (p7Q2Selected === 1) {
+                    q2Feedback.innerText = "Correct! Client C1 uses hh:mm:ss, 00h:00m:00s strictly.";
+                    q2Feedback.style.color = 'var(--secondary)';
+                } else {
+                    q2Feedback.innerText = (p7Q2Selected === 0) ? "Incorrect. That is the format for Client C2." : "Incorrect.";
+                    q2Feedback.style.color = 'var(--danger)';
+                }
+
+                // Evaluate Q3
+                const q3Feedback = document.getElementById('q3-feedback');
+                q3Feedback.style.display = 'block';
+                const q3Buttons = q3Feedback.closest('.quiz-question-card').querySelectorAll('.quiz-options button');
+                q3Buttons.forEach((b, idx) => {
+                    if (idx === 0) { // Correct: Client C1
+                        b.style.borderColor = 'var(--secondary)';
+                        b.style.background = 'rgba(16, 185, 129, 0.1)';
+                        b.style.color = '#065f46';
+                    } else if (idx === p7Q3Selected) {
+                        b.style.borderColor = 'var(--danger)';
+                        b.style.background = 'rgba(239, 68, 68, 0.1)';
+                        b.style.color = '#991b1b';
+                    }
+                });
+                if (p7Q3Selected === 0) {
+                    q3Feedback.innerText = "Correct! This is a mandatory annotation format for Client C1.";
+                    q3Feedback.style.color = 'var(--secondary)';
+                } else {
+                    q3Feedback.innerText = "Incorrect. Client C2 requires contextual notes but not specifically this format.";
+                    q3Feedback.style.color = 'var(--danger)';
+                }
+
+                // Evaluate Q4
+                const q4Feedback = document.getElementById('q4-feedback');
+                q4Feedback.style.display = 'block';
+                const q4Buttons = q4Feedback.closest('.quiz-question-card').querySelectorAll('.quiz-options button');
+                q4Buttons.forEach((b, idx) => {
+                    if (idx === 0) { // Correct: Via Email attachment
+                        b.style.borderColor = 'var(--secondary)';
+                        b.style.background = 'rgba(16, 185, 129, 0.1)';
+                        b.style.color = '#065f46';
+                    } else if (idx === p7Q4Selected) {
+                        b.style.borderColor = 'var(--danger)';
+                        b.style.background = 'rgba(239, 68, 68, 0.1)';
+                        b.style.color = '#991b1b';
+                    }
+                });
+                if (p7Q4Selected === 0) {
+                    q4Feedback.innerText = "Correct! Client C2 requires final handover via email attachment.";
+                    q4Feedback.style.color = 'var(--secondary)';
+                } else {
+                    q4Feedback.innerText = "Incorrect. Client C2 requires final handover via email attachment.";
+                    q4Feedback.style.color = 'var(--danger)';
+                }
+
+                // Calculate final score (out of 11 questions)
+                let correctAnswers = 0;
+                if (p1Correct) correctAnswers++;
+                if (p1bCorrect) correctAnswers++;
+                if (p2Correct) correctAnswers++;
+                if (p3Correct) correctAnswers++;
+                if (p4Correct) correctAnswers++;
+                if (p5Correct) correctAnswers++;
+                if (p6Correct) correctAnswers++;
+                
+                if (p7Q1Selected === 0) correctAnswers++;
+                if (p7Q2Selected === 1) correctAnswers++;
+                if (p7Q3Selected === 0) correctAnswers++;
+                if (p7Q4Selected === 0) correctAnswers++;
+
+                finalScore = Math.round((correctAnswers / 11) * 100);
+
+                const btn = document.getElementById('btn-phase7-submit');
+                btn.innerHTML = `Calculate & Submit Score <i class="fas fa-poll"></i>`;
+            } else {
+                showResults();
+            }
         }
 
         function checkAnswer(btn, isCorrect, feedbackText) {
@@ -1698,7 +1937,17 @@
 
         // Show Results Screen
         function showResults() {
+            if (globalTimerInterval) {
+                clearInterval(globalTimerInterval);
+            }
+            document.getElementById('global-timer-container').style.display = 'none';
             document.getElementById('assessment-progress').style.display = 'none';
+            document.getElementById('screen-phase1').style.display = 'none';
+            document.getElementById('screen-phase1b').style.display = 'none';
+            document.getElementById('screen-phase2').style.display = 'none';
+            document.getElementById('screen-phase3').style.display = 'none';
+            document.getElementById('screen-phase4').style.display = 'none';
+            document.getElementById('screen-phase5').style.display = 'none';
             document.getElementById('screen-phase6').style.display = 'none';
             document.getElementById('screen-phase7').style.display = 'none';
             document.getElementById('screen-results').style.display = 'block';
@@ -1726,7 +1975,7 @@
             } else {
                 scoreCircle.style.borderColor = 'var(--danger)';
                 scoreValue.style.color = 'var(--danger)';
-                resultsExplanation.innerHTML = `<b>Score below standard.</b> You scored ${finalScore}%. Review the <a href="youtube_project_guide.html">YouTube Project Guide</a> and try again to obtain your reviewer certification.`;
+                resultsExplanation.innerHTML = `<b>Score below standard.</b> You scored ${finalScore}%. Review the <a href="https://conversify-india.github.io/LINGOCHAPS-Docs/youtube_project_guide.html">YouTube Project Guide</a> and try again to obtain your reviewer certification.`;
                 document.getElementById('btnPrint').style.display = 'none';
             }
 
@@ -1791,11 +2040,41 @@
             const p5Text = p5Selected === null ? "None selected" : p5Answers[p5Selected];
             const p6Text = p6Selected === null ? "None selected" : p6Answers[p6Selected];
 
-            const detailedFeedback = `Phase 1 (Intake): Selected "${p1Text}" | Phase 1B (C2 Intake): Selected "${p1bText}" | Phase 2 (Tracking): Flagged "${p2Text}" | Phase 3 (QC): Flagged [${p3Text}] | Phase 4 (Feedback): Selected "${p4Text}" | Phase 5 (Timezone): Selected "${p5Text}" | Phase 6 (Sourcing): Selected "${p6Text}"`;
+            const p7Q1Answers = [
+                "Client C1 (Correct)",
+                "Client C2",
+                "Both Clients"
+            ];
+            const p7Q2Answers = [
+                "00:00:00 strictly",
+                "hh:mm:ss, 00h:00m:00s strictly (Correct)",
+                "MM:SS strictly"
+            ];
+            const p7Q3Answers = [
+                "Client C1 (Correct)",
+                "Client C2"
+            ];
+            const p7Q4Answers = [
+                "Via Email attachment (Correct)",
+                "Direct Folder Handover via designated project link"
+            ];
+
+            const p7Q1Text = p7Q1Selected === null ? "None selected" : p7Q1Answers[p7Q1Selected];
+            const p7Q2Text = p7Q2Selected === null ? "None selected" : p7Q2Answers[p7Q2Selected];
+            const p7Q3Text = p7Q3Selected === null ? "None selected" : p7Q3Answers[p7Q3Selected];
+            const p7Q4Text = p7Q4Selected === null ? "None selected" : p7Q4Answers[p7Q4Selected];
+
+            const detailedFeedback = `Phase 1 (Intake): Selected "${p1Text}" | Phase 1B (C2 Intake): Selected "${p1bText}" | Phase 2 (Tracking): Flagged "${p2Text}" | Phase 3 (QC): Selected "${p3Text}" | Phase 4 (Feedback): Selected "${p4Text}" | Phase 5 (Timezone): Selected "${p5Text}" | Phase 6 (Sourcing): Selected "${p6Text}" | Phase 7 Q1: Selected "${p7Q1Text}" | Phase 7 Q2: Selected "${p7Q2Text}" | Phase 7 Q3: Selected "${p7Q3Text}" | Phase 7 Q4: Selected "${p7Q4Text}"`;
+
+            const secondsTaken = 600 - globalSecondsLeft;
+            const minsTaken = Math.floor(secondsTaken / 60);
+            const secsTaken = secondsTaken % 60;
+            const timeTakenString = `${minsTaken}m ${secsTaken}s`;
 
             const payload = {
                 name: userName,
                 score: finalScore,
+                timeTaken: timeTakenString,
                 feedback: detailedFeedback
             };
 
