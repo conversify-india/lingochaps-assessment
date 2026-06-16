@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         :root {
             --primary: #4f46e5;
@@ -664,6 +665,7 @@
                         correctly audit all workflow violations to receive certificate.</li>
                     <li><i class="fas fa-database" style="color: var(--primary);"></i> <b>Result Logged:</b> Your score
                         is automatically recorded in the manager database sheet.</li>
+                    <li><i class="fas fa-envelope" style="color: var(--primary);"></i> <b>Result Emailed:</b> A detailed score report will be sent to your email address after completion.</li>
                 </ul>
             </div>
 
@@ -672,9 +674,20 @@
                 <input type="text" id="userName" placeholder="e.g., Jane Doe" required autocomplete="off">
             </div>
 
-            <div style="text-align: center; margin-top: 2rem;">
+            <div class="form-group">
+                <label for="userEmail">Enter Your Email Address:</label>
+                <input type="text" id="userEmail" placeholder="e.g., jane@example.com" required autocomplete="off">
+                <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.4rem; margin-bottom: 0;">
+                    <i class="fas fa-info-circle"></i> Your score report will be sent here after you complete the assessment.
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
                 <button class="btn" onclick="startAssessment()">
                     Start Assessment <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="btn btn-secondary" onclick="downloadReferenceDoc()">
+                    <i class="fas fa-file-word"></i> Download Reference Guide
                 </button>
             </div>
         </div>
@@ -1219,8 +1232,28 @@
         // Set this to enable automatic logging of scores
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZaJs9gLLoV_eSC0L-uMG4YMNB82i1kC9rlxMwUsI8pK5kBfE2NxpNBIu7Pm5LV3RW/exec";
 
+        // ─── EmailJS Configuration ──────────────────────────────────────────────
+        // 1. Sign up free at https://www.emailjs.com
+        // 2. Add an Email Service (Gmail, Outlook, etc.) → copy the Service ID
+        // 3. Create an Email Template using the variables listed below → copy the Template ID
+        // 4. Go to Account → API Keys → copy your Public Key
+        //
+        // Template variables available (use in your EmailJS template):
+        //   {{to_name}}         – tester's full name
+        //   {{to_email}}        – tester's email address
+        //   {{score}}           – percentage score, e.g. "82%"
+        //   {{result_status}}   – "PASSED ✅" or "FAILED ❌"
+        //   {{correct_answers}} – e.g. "9 out of 11"
+        //   {{time_taken}}      – e.g. "4m 32s"
+        //   {{phase_breakdown}} – per-phase correct/incorrect summary
+        // ────────────────────────────────────────────────────────────────────────
+        const EMAILJS_PUBLIC_KEY  = "NdvDVRE2cChjri2_E";
+        const EMAILJS_SERVICE_ID  = "service_npbh4fn";
+        const EMAILJS_TEMPLATE_ID = "template_idx5c9b";
+
         let currentPhase = 1;
         let userName = "";
+        let userEmail = "";
         let timerInterval = null;
         let p1Selected = null;
         let p2Selected = null;
@@ -1265,22 +1298,33 @@
             }
         }
 
-        // Initialize theme based on preference
+        // Initialize theme + EmailJS on page load
         window.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
                 document.getElementById('themeToggle').querySelector('i').classList.replace('fa-moon', 'fa-sun');
             }
+            if (EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
+                emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+            }
         });
 
         // Start Assessment
         function startAssessment() {
-            const nameInput = document.getElementById('userName').value.trim();
+            const nameInput  = document.getElementById('userName').value.trim();
+            const emailInput = document.getElementById('userEmail').value.trim();
+
             if (!nameInput) {
                 alert("Please enter your name to start the test.");
                 return;
             }
-            userName = nameInput;
+            if (!emailInput || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
+                alert("Please enter a valid email address to receive your result.");
+                return;
+            }
+
+            userName  = nameInput;
+            userEmail = emailInput;
             document.getElementById('screen-welcome').style.display = 'none';
             document.getElementById('assessment-progress').style.display = 'block';
             document.getElementById('global-timer-container').style.display = 'flex';
@@ -1981,6 +2025,9 @@
 
             // Log score in Google Sheet
             sendLogData();
+
+            // Send result email to the tester
+            sendResultEmail();
         }
 
         // Send logs to Google Sheet Web App
@@ -2073,6 +2120,7 @@
 
             const payload = {
                 name: userName,
+                email: userEmail,
                 score: finalScore,
                 timeTaken: timeTakenString,
                 feedback: detailedFeedback
@@ -2090,6 +2138,308 @@
         // Retry Quiz
         function retryQuiz() {
             location.reload();
+        }
+
+        // Send result email to the tester via EmailJS
+        function sendResultEmail() {
+            if (!EMAILJS_SERVICE_ID || EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID") {
+                console.warn("EmailJS not configured. Skipping result email.");
+                return;
+            }
+
+            const secondsTaken  = 600 - globalSecondsLeft;
+            const minsTaken     = Math.floor(secondsTaken / 60);
+            const secsTaken     = secondsTaken % 60;
+            const timeTakenStr  = `${minsTaken}m ${secsTaken}s`;
+
+            let correctCount = 0;
+            if (p1Correct)  correctCount++;
+            if (p1bCorrect) correctCount++;
+            if (p2Correct)  correctCount++;
+            if (p3Correct)  correctCount++;
+            if (p4Correct)  correctCount++;
+            if (p5Correct)  correctCount++;
+            if (p6Correct)  correctCount++;
+            if (p7Q1Selected === 0) correctCount++;
+            if (p7Q2Selected === 1) correctCount++;
+            if (p7Q3Selected === 0) correctCount++;
+            if (p7Q4Selected === 0) correctCount++;
+
+            const resultStatus = finalScore >= 75 ? "PASSED ✅" : "FAILED ❌";
+
+            const phaseBreakdown =
+`Phase 1  – Intake & Global Comms        : ${p1Correct  ? "✅ Correct" : "❌ Incorrect"}
+Phase 1B – Client C2 Intake Protocol    : ${p1bCorrect ? "✅ Correct" : "❌ Incorrect"}
+Phase 2  – Allocation Sheet Check       : ${p2Correct  ? "✅ Correct" : "❌ Incorrect"}
+Phase 3  – Work-in-Progress Tracking    : ${p3Correct  ? "✅ Correct" : "❌ Incorrect"}
+Phase 4  – Issue Resolution             : ${p4Correct  ? "✅ Correct" : "❌ Incorrect"}
+Phase 5  – Timezone Alignment           : ${p5Correct  ? "✅ Correct" : "❌ Incorrect"}
+Phase 6  – Resource Sourcing Awareness  : ${p6Correct  ? "✅ Correct" : "❌ Incorrect"}
+Phase 7 Q1 – No translator info shared  : ${p7Q1Selected === 0 ? "✅ Correct" : "❌ Incorrect"}
+Phase 7 Q2 – Timestamp format C1        : ${p7Q2Selected === 1 ? "✅ Correct" : "❌ Incorrect"}
+Phase 7 Q3 – Origin+Language+Context    : ${p7Q3Selected === 0 ? "✅ Correct" : "❌ Incorrect"}
+Phase 7 Q4 – Final handover for C2      : ${p7Q4Selected === 0 ? "✅ Correct" : "❌ Incorrect"}`;
+
+            const templateParams = {
+                to_name:         userName,
+                to_email:        userEmail,
+                score:           `${finalScore}%`,
+                result_status:   resultStatus,
+                correct_answers: `${correctCount} out of 11`,
+                time_taken:      timeTakenStr,
+                phase_breakdown: phaseBreakdown
+            };
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                .then(() => {
+                    console.log("Result email sent to:", userEmail);
+                    // Show a subtle toast notification
+                    const toast = document.createElement('div');
+                    toast.innerText = `📧 Score report sent to ${userEmail}`;
+                    toast.style.cssText = `
+                        position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+                        background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 12px;
+                        font-size: 0.9rem; font-weight: 600; z-index: 9999;
+                        box-shadow: 0 8px 24px rgba(0,0,0,0.2); opacity: 0;
+                        transition: opacity 0.4s ease;
+                    `;
+                    document.body.appendChild(toast);
+                    requestAnimationFrame(() => { toast.style.opacity = '1'; });
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                        setTimeout(() => toast.remove(), 400);
+                    }, 4000);
+                })
+                .catch(err => {
+                    console.error("Failed to send result email:", err);
+                });
+        }
+
+        // Download Reference Guide as .doc
+        function downloadReferenceDoc() {
+            const content = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #1e293b; margin: 40px; line-height: 1.6; }
+  h1 { font-size: 18pt; color: #4f46e5; text-align: center; margin-bottom: 4px; }
+  h2 { font-size: 13pt; color: #4f46e5; margin-top: 24px; margin-bottom: 6px; border-bottom: 1px solid #4f46e5; padding-bottom: 4px; }
+  h3 { font-size: 11pt; margin-top: 16px; margin-bottom: 4px; color: #1e293b; }
+  .subtitle { text-align: center; color: #64748b; font-size: 10pt; margin-bottom: 24px; }
+  .divider { border: none; border-top: 1px solid #e2e8f0; margin: 16px 0; }
+  .question { font-weight: bold; margin-top: 12px; margin-bottom: 6px; }
+  .option { margin-left: 20px; margin-bottom: 3px; }
+  .option.correct { color: #166534; font-weight: bold; }
+  .option.incorrect { color: #991b1b; }
+  .answer-label { font-size: 9pt; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-top: 8px; }
+  .answer { color: #166534; font-weight: bold; margin-bottom: 4px; }
+  .explanation-label { font-size: 9pt; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-top: 6px; }
+  .explanation { color: #1e293b; background: #f8fafc; border-left: 3px solid #4f46e5; padding: 6px 10px; margin: 4px 0 12px 0; font-size: 10.5pt; }
+  .footer { text-align: center; font-size: 9pt; color: #94a3b8; margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+</style>
+</head>
+<body>
+
+<h1>Lingo Chaps &mdash; Reviewer Certification Assessment</h1>
+<p class="subtitle">Question &amp; Answer Reference Guide &nbsp;&bull;&nbsp; All Phases</p>
+
+<hr class="divider">
+
+<h2>Phase 1: Intake &amp; Global Communications</h2>
+<p>A new client dropped a message in your WhatsApp group. According to the <strong>Global Communications Intake Protocol</strong>, you must reply immediately.</p>
+<p><em>Scenario:</em> "Hi, Can you pick up a task? Spanish, 00:00:00-00:15:00, ETA-8pm? Can you confirm?"</p>
+
+<p class="question">Q1. Choose the best next action:</p>
+<p class="option incorrect">A. Wait for the assigned translator to confirm availability before replying to the client.</p>
+<p class="option incorrect">B. Reply immediately: "Received! We will confirm the ETA in 5-10 minutes."</p>
+<p class="option correct">C. &#10003; Confirm immediately: "Yes, we can work on it, please assign." OR check resource availability (in case there is a timezone difference).</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">C &mdash; Confirm immediately / check resource availability for timezone difference.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">Confirming immediately or checking availability with timezone awareness keeps client communication prompt and accurate. Waiting for translators violates the 5-Minute rule. A general acknowledgment without confirming or checking resource availability is not optimal.</p>
+
+<hr class="divider">
+
+<h2>Phase 1B: Client C2 Intake Protocol</h2>
+<p>Client C2 has assigned a new task. You performed the Triad Check (Video, OST, Deadline) and noticed the video contains a significant amount of a foreign language. The ETA is very tight.</p>
+<p><em>Scenario:</em> "Hey team, new Spanish task assigned. Video link and OST are in the folder. ETA is 2 hours."</p>
+
+<p class="question">Q2. Choose the best next action:</p>
+<p class="option incorrect">A. Accept the task immediately without mentioning the foreign language to maintain Zero-Delay status.</p>
+<p class="option correct">B. &#10003; Check if translation can be done within the ETA. If not, request a time limit extension immediately to ensure the job is done correctly.</p>
+<p class="option incorrect">C. Reject the task immediately since foreign languages are never translated.</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">B &mdash; Check ETA feasibility; request extension if needed.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">Checking ETA feasibility against the foreign language and immediately requesting a time limit extension ensures quality. Accepting immediately ignores the language difficulty, and rejecting outright without evaluating feasibility violates protocol.</p>
+
+<hr class="divider">
+
+<h2>Phase 2: Allocation &amp; Real-Time Tracking</h2>
+<p>To maintain <strong>Zero-Delay status</strong>, the project status must be updated in the allocation sheet immediately. Three rows are shown in the sheet. Identify the row that correctly follows all operational and naming guidelines.</p>
+
+<p class="question">Q3. Which allocation sheet row is correctly formatted?</p>
+<p class="option correct">A. &#10003; Row 1 (Spanish) &mdash; Language: Spanish | Assigned On: Email | Doc: Spanish_00:00:00-00:05:00.docx | Duration: 00:00:00-00:05:00 | Deadline: 4:00 PM | Translator: Maria G.</p>
+<p class="option incorrect">B. Row 2 (Persian review) &mdash; Missing "Assigned On" field, invalid link format (missing https:), missing .docx extension.</p>
+<p class="option incorrect">C. Row 3 (Bahasa) &mdash; Uses dot separators and spaces in filename (Bahasa_00.00.00- 00.03.31.docx), missing duration column.</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">A &mdash; Row 1 (Spanish) is the only correctly formatted entry.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">Row 1 (Spanish) correctly follows all operational and naming guidelines with complete assignment logs and correct file naming/durations. Row 2 has a missing "Assigned On" field, an invalid link, and no .docx extension. Row 3 uses period separators and spaces which violates formatting standards.</p>
+
+<hr class="divider">
+
+<h2>Phase 3: Tracking Work in Progress</h2>
+<p>As a project reviewer, you need to ensure proper tracking and communication while the translation is ongoing.</p>
+
+<p class="question">Q4. What is required to track while work is in progress?</p>
+<p class="option correct">A. &#10003; Track progress of translator, add metadata, add screenshot of OST, and add comments in the speech for incomplete work or missing notes.</p>
+<p class="option incorrect">B. Only check the final submission document and ignore intermediate progress.</p>
+<p class="option incorrect">C. Email the translator every hour to ask for updates without logging anything.</p>
+<p class="option incorrect">D. Wait until the deadline to verify if metadata and OST screenshots are added.</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">A &mdash; Proactively track progress, manage metadata, and keep communication notes updated.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">You must proactively track progress, manage metadata, and keep communication notes updated. Waiting or ignoring progress tracking leads to delays and missed quality checks.</p>
+
+<hr class="divider">
+
+<h2>Phase 4: Issue Resolution</h2>
+<p>You notice a translator is missing out on certain portions of speech while working on a live doc.</p>
+
+<p class="question">Q5. What would you do?</p>
+<p class="option correct">A. &#10003; Comment out what is missing and inform the senior so they can communicate with the resource.</p>
+<p class="option incorrect">B. Fix the missing portion yourself without telling anyone to save time.</p>
+<p class="option incorrect">C. Ignore the missing portion.</p>
+<p class="option incorrect">D. Add a comment without informing the senior.</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">A &mdash; Comment on the missing portion and inform the senior manager.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">Commenting on the missing portion and involving a senior ensures the issue is tracked and communicated professionally. Ignoring it, fixing it silently, or not escalating violates protocol.</p>
+
+<hr class="divider">
+
+<h2>Phase 5: Timezone Alignment Check</h2>
+<p>A client assigns a high-priority task with a 3-hour deadline, but the only available translator for this language is in a timezone with a 7-hour difference and is currently offline.</p>
+
+<p class="question">Q6. According to protocol, what should you do?</p>
+<p class="option incorrect">A. Decline the task immediately without notifying the client or senior management to avoid missing the deadline.</p>
+<p class="option incorrect">B. Accept the task and hope the translator wakes up or responds in time to complete the work.</p>
+<p class="option correct">C. &#10003; Consult with a senior manager to negotiate a realistic ETA with the client based on timezone conflict and quantity of work before starting execution.</p>
+<p class="option incorrect">D. Assign the task to a machine translation tool to ensure delivery within the 3-hour window.</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">C &mdash; Consult senior manager and negotiate a realistic ETA with the client.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">Under Scenario B, when there is a timezone conflict or insufficient ETA, you must negotiate a realistic ETA based on quantity of work &mdash; but always consult with a senior manager first before rejecting or declining. Standard protocol dictates you never decline unilaterally or rely on machine translation.</p>
+
+<hr class="divider">
+
+<h2>Phase 6: Resource Sourcing Awareness</h2>
+<p>When a new task is received from a client, when should the Project Manager or Associate assess timezone differences and resource availability?</p>
+
+<p class="question">Q7. Choose the correct answer:</p>
+<p class="option incorrect">A. Only after the client follows up to ask for a status update on the project.</p>
+<p class="option correct">B. &#10003; Be fully aware of resource availability across different timezones before accepting the task to ensure proper assignment and timely completion.</p>
+<p class="option incorrect">C. After the deadline has already passed, if the original translator has not submitted the file.</p>
+<p class="option incorrect">D. Assume all translators are in the same local timezone as the Project Manager.</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">B &mdash; Assess resource availability and timezones BEFORE accepting the task.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">You must be fully aware of resource availability across different timezones before accepting the task, ensuring proper assignment and avoiding last-minute delays.</p>
+
+<hr class="divider">
+
+<h2>Phase 7: Knowledge Check &mdash; Client Approaches (C1 vs C2)</h2>
+<p>Test your understanding of the different submission protocols for Client C1 and Client C2.</p>
+
+<p class="question">Q8. Which client strictly requires that NO translator details (e.g., Translator Name) be shared?</p>
+<p class="option correct">A. &#10003; Client C1</p>
+<p class="option incorrect">B. Client C2</p>
+<p class="option incorrect">C. Both Clients</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">A &mdash; Client C1 has strict privacy rules regarding translator details.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">Client C1 strictly requires that NO translator details be shared externally. Client C2 actually requires the Translator Name to be included in data entry.</p>
+
+<hr class="divider">
+
+<p class="question">Q9. What is the correct timestamp format for Client C1?</p>
+<p class="option incorrect">A. 00:00:00 strictly</p>
+<p class="option correct">B. &#10003; hh:mm:ss, 00h:00m:00s strictly</p>
+<p class="option incorrect">C. MM:SS strictly</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">B &mdash; hh:mm:ss, 00h:00m:00s strictly.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">Client C1 uses the strict format hh:mm:ss / 00h:00m:00s. The plain 00:00:00 format is for Client C2. MM:SS is not a valid format for either client.</p>
+
+<hr class="divider">
+
+<p class="question">Q10. For which client must you provide Origin Text + Language + Context in the Annotations?</p>
+<p class="option correct">A. &#10003; Client C1</p>
+<p class="option incorrect">B. Client C2</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">A &mdash; Client C1 requires Origin Text + Language + Context in annotations.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">This is a mandatory annotation format for Client C1. Client C2 requires contextual notes but not specifically this three-part Origin Text + Language + Context format.</p>
+
+<hr class="divider">
+
+<p class="question">Q11. How is the final handover conducted for Client C2?</p>
+<p class="option correct">A. &#10003; Via Email attachment</p>
+<p class="option incorrect">B. Direct Folder Handover via designated project link</p>
+
+<p class="answer-label">Correct Answer:</p>
+<p class="answer">A &mdash; Via Email attachment.</p>
+<p class="explanation-label">Explanation:</p>
+<p class="explanation">Client C2 requires the final handover to be delivered via email attachment. Direct folder handover applies to a different workflow and is not the correct method for Client C2.</p>
+
+<hr class="divider">
+
+<h2>Quick Summary &mdash; Correct Answers</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%; font-size:10pt;">
+  <tr style="background:#4f46e5; color:white;">
+    <th>Phase</th><th>Question</th><th>Correct Answer</th>
+  </tr>
+  <tr><td>Phase 1</td><td>Global Communications Intake</td><td>C &mdash; Confirm immediately / check resource availability</td></tr>
+  <tr style="background:#f8fafc;"><td>Phase 1B</td><td>Client C2 Intake Protocol</td><td>B &mdash; Check ETA feasibility; request extension if needed</td></tr>
+  <tr><td>Phase 2</td><td>Allocation Sheet Formatting</td><td>A &mdash; Row 1 (Spanish) is correctly formatted</td></tr>
+  <tr style="background:#f8fafc;"><td>Phase 3</td><td>Work-in-Progress Tracking</td><td>A &mdash; Track progress, add metadata, add OST screenshots, comment on issues</td></tr>
+  <tr><td>Phase 4</td><td>Issue Resolution (Missing Portions)</td><td>A &mdash; Comment on missing portion and inform senior</td></tr>
+  <tr style="background:#f8fafc;"><td>Phase 5</td><td>Timezone Alignment Check</td><td>C &mdash; Consult senior; negotiate realistic ETA with client</td></tr>
+  <tr><td>Phase 6</td><td>Resource Sourcing Awareness</td><td>B &mdash; Assess resource availability BEFORE accepting the task</td></tr>
+  <tr style="background:#f8fafc;"><td>Phase 7 Q1</td><td>No translator details shared</td><td>A &mdash; Client C1</td></tr>
+  <tr><td>Phase 7 Q2</td><td>Timestamp format for Client C1</td><td>B &mdash; hh:mm:ss, 00h:00m:00s strictly</td></tr>
+  <tr style="background:#f8fafc;"><td>Phase 7 Q3</td><td>Origin Text + Language + Context annotations</td><td>A &mdash; Client C1</td></tr>
+  <tr><td>Phase 7 Q4</td><td>Final handover for Client C2</td><td>A &mdash; Via Email attachment</td></tr>
+</table>
+
+<p class="footer">&copy; 2026 Lingo Chaps &mdash; Reviewer Certification Portal. For internal use only.</p>
+
+</body>
+</html>`;
+
+            const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'LingoChaps_Assessment_Reference_Guide.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
