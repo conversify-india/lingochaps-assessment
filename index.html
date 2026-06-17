@@ -2115,10 +2115,27 @@
             const secsTaken = secondsTaken % 60;
             const timeTakenString = `${minsTaken}m ${secsTaken}s`;
 
+            let correctAnswers = 0;
+            if (p1Correct) correctAnswers++;
+            if (p1bCorrect) correctAnswers++;
+            if (p2Correct) correctAnswers++;
+            if (p3Correct) correctAnswers++;
+            if (p4Correct) correctAnswers++;
+            if (p5Correct) correctAnswers++;
+            if (p6Correct) correctAnswers++;
+            if (p7Q1Selected === 0) correctAnswers++;
+            if (p7Q2Selected === 1) correctAnswers++;
+            if (p7Q3Selected === 0) correctAnswers++;
+            if (p7Q4Selected === 0) correctAnswers++;
+
             const payload = {
+                quizType: "Reviewer Certification",
                 name: userName,
                 email: userEmail,
                 score: finalScore,
+                correctCount: correctAnswers,
+                totalQuestions: 11,
+                resultStatus: finalScore >= 75 ? "PASSED" : "FAILED",
                 timeTaken: timeTakenString,
                 feedback: detailedFeedback
             };
