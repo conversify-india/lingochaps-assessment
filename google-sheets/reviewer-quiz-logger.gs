@@ -1,22 +1,21 @@
 /**
- * Lingo Chaps — Assessment Results Logger
+ * Lingo Chaps — Reviewer Certification Quiz Logger
  *
- * SETUP (one time):
- * 1. Open your Google Sheet (manager database sheet).
- * 2. Extensions → Apps Script → paste this entire file → Save.
+ * Attach this script to your REVIEWER Google Sheet only.
+ *
+ * SETUP:
+ * 1. Open your Reviewer results sheet:
+ *    https://docs.google.com/spreadsheets/d/1hYH-gN4XC9hEwwPyHtG8MFXCnyHShfEr54K9ZcXHLPA/edit
+ * 2. Extensions → Apps Script → paste this file → Save
  * 3. Deploy → New deployment → Web app
  *    - Execute as: Me
  *    - Who has access: Anyone
- * 4. Copy the Web App URL into pm_onboarding_quiz.html (GOOGLE_SCRIPT_URL).
- *
- * Sheet tabs created automatically:
- *   - "PM Quiz Logs"        — PM Onboarding Quiz results
- *   - "Reviewer Quiz Logs"  — Reviewer Certification results
+ * 4. Copy the Web App URL into index.html → GOOGLE_SCRIPT_URL
  */
 
+var SHEET_NAME = "Reviewer Quiz Logs";
 var HEADERS = [
   "Timestamp",
-  "Quiz Type",
   "Name",
   "Email",
   "Score (%)",
@@ -30,13 +29,10 @@ var HEADERS = [
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
-    var quizType = data.quizType || "Unknown Quiz";
-    var sheetName = quizType.indexOf("PM") !== -1 ? "PM Quiz Logs" : "Reviewer Quiz Logs";
-    var sheet = getOrCreateSheet_(sheetName);
+    var sheet = getOrCreateSheet_(SHEET_NAME);
 
-    var row = [
+    sheet.appendRow([
       new Date(),
-      quizType,
       data.name || "",
       data.email || "",
       data.score !== undefined ? data.score : "",
@@ -45,9 +41,7 @@ function doPost(e) {
       data.resultStatus || "",
       data.timeTaken || "",
       data.feedback || ""
-    ];
-
-    sheet.appendRow(row);
+    ]);
 
     return ContentService
       .createTextOutput(JSON.stringify({ success: true }))
