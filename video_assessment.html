@@ -783,12 +783,13 @@
 
             const payload = {
                 employeeName: name,
+                submittedAt: new Date().toISOString(),
                 difficultyLevel: difficultyLevel,
                 timeTaken: timeTakenString,
                 autoScore: `${finalScorePercentage}%`,
                 ostAnswer: firstOst,
                 notesAnswer: firstNotes,
-                translations: JSON.stringify(tableData) // Kept for backend completeness, but you can ignore this column in sheets
+                translations: JSON.stringify(tableData)
             };
 
             // Simulate submission UI
@@ -801,25 +802,21 @@
             localStorage.removeItem('employeeName');
 
             // Google Apps Script Web App URL
+            // Must use google-sheets/video-assessment-logger.gs deployed from the target Google Sheet.
             const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyl95kpoYBWRhXT3_UMgeVbVHm8SgFetUy2oMdxfqKrPfHW48inCtT_q9KdRm_YRu3LFA/exec";
-
-            if (GOOGLE_SCRIPT_URL === "YOUR_WEB_APP_URL_HERE") {
-                console.warn("Please replace GOOGLE_SCRIPT_URL with your actual Apps Script URL.");
-                // We will proceed to show the success message anyway for testing
-            }
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
-                redirect: "follow",
+                mode: "no-cors",
                 headers: {
-                    "Content-Type": "text/plain;charset=utf-8",
+                    "Content-Type": "text/plain;charset=utf-8"
                 },
                 body: JSON.stringify(payload)
-            }).then(response => {
+            }).then(() => {
                 showSuccessMessage(finalScorePercentage);
             }).catch(error => {
                 console.error("Error submitting to Google Sheets:", error);
-                // Even if it fails (e.g. CORS block during local testing), we show success
+                alert("Could not confirm Google Sheets sync. If results are missing, contact your administrator.");
                 showSuccessMessage(finalScorePercentage);
             });
 
