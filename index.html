@@ -617,9 +617,11 @@
             0% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.05);
             }
+
             100% {
                 transform: scale(1);
             }
@@ -660,12 +662,15 @@
                     Guidelines:</h3>
                 <ul
                     style="list-style-type: none; font-size: 0.95rem; display: flex; flex-direction: column; gap: 10px;">
-                    <li><i class="fas fa-clock" style="color: var(--primary);"></i> <b>Time limits:</b> Intake phase tests the WhatsApp prompt response speed. You have <b>10 minutes</b> to complete the entire assessment.</li>
+                    <li><i class="fas fa-clock" style="color: var(--primary);"></i> <b>Time limits:</b> Intake phase
+                        tests the WhatsApp prompt response speed. You have <b>10 minutes</b> to complete the entire
+                        assessment.</li>
                     <li><i class="fas fa-check-circle" style="color: var(--secondary);"></i> <b>Passing Grade:</b> Must
                         correctly audit all workflow violations to receive certificate.</li>
                     <li><i class="fas fa-database" style="color: var(--primary);"></i> <b>Result Logged:</b> Your score
                         is automatically recorded in the manager database sheet.</li>
-                    <li><i class="fas fa-envelope" style="color: var(--primary);"></i> <b>Result Emailed:</b> A detailed score report will be sent to your email address after completion.</li>
+                    <li><i class="fas fa-envelope" style="color: var(--primary);"></i> <b>Result Emailed:</b> A detailed
+                        score report will be sent to your email address after completion.</li>
                 </ul>
             </div>
 
@@ -678,7 +683,8 @@
                 <label for="userEmail">Enter Your Email Address:</label>
                 <input type="text" id="userEmail" placeholder="e.g., jane@example.com" required autocomplete="off">
                 <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.4rem; margin-bottom: 0;">
-                    <i class="fas fa-info-circle"></i> Your score report will be sent here after you complete the assessment.
+                    <i class="fas fa-info-circle"></i> Your score report will be sent here after you complete the
+                    assessment.
                 </p>
             </div>
 
@@ -1089,12 +1095,10 @@
                     <h4 style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem;">1. Which client
                         strictly requires that NO translator details (e.g., Translator Name) be shared?</h4>
                     <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button
-                            onclick="selectPhase7Answer(1, 0, this)"
+                        <button onclick="selectPhase7Answer(1, 0, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
                             C1</button>
-                        <button
-                            onclick="selectPhase7Answer(1, 1, this)"
+                        <button onclick="selectPhase7Answer(1, 1, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
                             C2</button>
                         <button onclick="selectPhase7Answer(1, 2, this)"
@@ -1114,8 +1118,7 @@
                         <button onclick="selectPhase7Answer(2, 0, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">00:00:00
                             strictly</button>
-                        <button
-                            onclick="selectPhase7Answer(2, 1, this)"
+                        <button onclick="selectPhase7Answer(2, 1, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">hh:mm:ss,
                             00h:00m:00s strictly</button>
                         <button onclick="selectPhase7Answer(2, 2, this)"
@@ -1132,12 +1135,10 @@
                     <h4 style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem;">3. For which client
                         must you provide Origin Text + Language + Context in the Annotations?</h4>
                     <div class="quiz-options" style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button
-                            onclick="selectPhase7Answer(3, 0, this)"
+                        <button onclick="selectPhase7Answer(3, 0, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
                             C1</button>
-                        <button
-                            onclick="selectPhase7Answer(3, 1, this)"
+                        <button onclick="selectPhase7Answer(3, 1, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Client
                             C2</button>
                     </div>
@@ -1154,8 +1155,7 @@
                         <button onclick="selectPhase7Answer(4, 0, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Via
                             Email attachment</button>
-                        <button
-                            onclick="selectPhase7Answer(4, 1, this)"
+                        <button onclick="selectPhase7Answer(4, 1, this)"
                             style="padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: 0.2s; font-weight: 500;">Direct
                             Folder Handover via designated project link</button>
                     </div>
@@ -1227,7 +1227,7 @@
     <script>
         // Set your Google Sheet Script Web App URL here
         // Set this to enable automatic logging of scores
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZaJs9gLLoV_eSC0L-uMG4YMNB82i1kC9rlxMwUsI8pK5kBfE2NxpNBIu7Pm5LV3RW/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVR5z0RMXAo9N69uhhMF5THX8lkADT8Wt6fk6mIldg_hzYT7-DVXUyOmrI_31EI4cN/exec";
 
         // ─── EmailJS Configuration ──────────────────────────────────────────────
         // 1. Sign up free at https://www.emailjs.com
@@ -1244,8 +1244,8 @@
         //   {{time_taken}}      – e.g. "4m 32s"
         //   {{phase_breakdown}} – per-phase correct/incorrect summary
         // ────────────────────────────────────────────────────────────────────────
-        const EMAILJS_PUBLIC_KEY  = "NdvDVRE2cChjri2_E";
-        const EMAILJS_SERVICE_ID  = "service_npbh4fn";
+        const EMAILJS_PUBLIC_KEY = "NdvDVRE2cChjri2_E";
+        const EMAILJS_SERVICE_ID = "service_npbh4fn";
         const EMAILJS_TEMPLATE_ID = "template_idx5c9b";
 
         let currentPhase = 1;
@@ -1308,7 +1308,7 @@
 
         // Start Assessment
         function startAssessment() {
-            const nameInput  = document.getElementById('userName').value.trim();
+            const nameInput = document.getElementById('userName').value.trim();
             const emailInput = document.getElementById('userEmail').value.trim();
 
             if (!nameInput) {
@@ -1320,7 +1320,7 @@
                 return;
             }
 
-            userName  = nameInput;
+            userName = nameInput;
             userEmail = emailInput;
             document.getElementById('screen-welcome').style.display = 'none';
             document.getElementById('assessment-progress').style.display = 'block';
@@ -1334,20 +1334,20 @@
             globalSecondsLeft = 600;
             const timerContainer = document.getElementById('global-timer-container');
             const timerDisplay = document.getElementById('globalTimerDisplay');
-            
+
             globalTimerInterval = setInterval(() => {
                 globalSecondsLeft--;
-                
+
                 let mins = Math.floor(globalSecondsLeft / 60);
                 let secs = globalSecondsLeft % 60;
                 timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                
+
                 if (globalSecondsLeft <= 60) {
                     if (!timerContainer.classList.contains('warning')) {
                         timerContainer.classList.add('warning');
                     }
                 }
-                
+
                 if (globalSecondsLeft <= 0) {
                     clearInterval(globalTimerInterval);
                     globalTimerExpired = true;
@@ -1361,7 +1361,7 @@
             if (timerInterval) {
                 clearInterval(timerInterval);
             }
-            
+
             // Calculate score with whatever is answered
             let correctAnswers = 0;
             if (p1Correct) correctAnswers++;
@@ -1371,12 +1371,12 @@
             if (p4Correct) correctAnswers++;
             if (p5Correct) correctAnswers++;
             if (p6Correct) correctAnswers++;
-            
+
             if (p7Q1Selected === 0) correctAnswers++;
             if (p7Q2Selected === 1) correctAnswers++;
             if (p7Q3Selected === 0) correctAnswers++;
             if (p7Q4Selected === 0) correctAnswers++;
-            
+
             finalScore = Math.round((correctAnswers / 11) * 100);
             showResults();
         }
@@ -1826,7 +1826,7 @@
         function submitPhase7() {
             if (!phase7Submitted) {
                 phase7Submitted = true;
-                
+
                 // Disable further selection
                 const allButtons = document.querySelectorAll('.quiz-options button');
                 allButtons.forEach(b => {
@@ -1934,7 +1934,7 @@
                 if (p4Correct) correctAnswers++;
                 if (p5Correct) correctAnswers++;
                 if (p6Correct) correctAnswers++;
-                
+
                 if (p7Q1Selected === 0) correctAnswers++;
                 if (p7Q2Selected === 1) correctAnswers++;
                 if (p7Q3Selected === 0) correctAnswers++;
@@ -2160,19 +2160,19 @@
                 return;
             }
 
-            const secondsTaken  = 600 - globalSecondsLeft;
-            const minsTaken     = Math.floor(secondsTaken / 60);
-            const secsTaken     = secondsTaken % 60;
-            const timeTakenStr  = `${minsTaken}m ${secsTaken}s`;
+            const secondsTaken = 600 - globalSecondsLeft;
+            const minsTaken = Math.floor(secondsTaken / 60);
+            const secsTaken = secondsTaken % 60;
+            const timeTakenStr = `${minsTaken}m ${secsTaken}s`;
 
             let correctCount = 0;
-            if (p1Correct)  correctCount++;
+            if (p1Correct) correctCount++;
             if (p1bCorrect) correctCount++;
-            if (p2Correct)  correctCount++;
-            if (p3Correct)  correctCount++;
-            if (p4Correct)  correctCount++;
-            if (p5Correct)  correctCount++;
-            if (p6Correct)  correctCount++;
+            if (p2Correct) correctCount++;
+            if (p3Correct) correctCount++;
+            if (p4Correct) correctCount++;
+            if (p5Correct) correctCount++;
+            if (p6Correct) correctCount++;
             if (p7Q1Selected === 0) correctCount++;
             if (p7Q2Selected === 1) correctCount++;
             if (p7Q3Selected === 0) correctCount++;
@@ -2181,25 +2181,25 @@
             const resultStatus = finalScore >= 75 ? "PASSED ✅" : "FAILED ❌";
 
             const phaseBreakdown =
-`Phase 1  – Intake & Global Comms        : ${p1Correct  ? "✅ Correct" : "❌ Incorrect"}
+                `Phase 1  – Intake & Global Comms        : ${p1Correct ? "✅ Correct" : "❌ Incorrect"}
 Phase 1B – Client C2 Intake Protocol    : ${p1bCorrect ? "✅ Correct" : "❌ Incorrect"}
-Phase 2  – Allocation Sheet Check       : ${p2Correct  ? "✅ Correct" : "❌ Incorrect"}
-Phase 3  – Work-in-Progress Tracking    : ${p3Correct  ? "✅ Correct" : "❌ Incorrect"}
-Phase 4  – Issue Resolution             : ${p4Correct  ? "✅ Correct" : "❌ Incorrect"}
-Phase 5  – Timezone Alignment           : ${p5Correct  ? "✅ Correct" : "❌ Incorrect"}
-Phase 6  – Resource Sourcing Awareness  : ${p6Correct  ? "✅ Correct" : "❌ Incorrect"}
+Phase 2  – Allocation Sheet Check       : ${p2Correct ? "✅ Correct" : "❌ Incorrect"}
+Phase 3  – Work-in-Progress Tracking    : ${p3Correct ? "✅ Correct" : "❌ Incorrect"}
+Phase 4  – Issue Resolution             : ${p4Correct ? "✅ Correct" : "❌ Incorrect"}
+Phase 5  – Timezone Alignment           : ${p5Correct ? "✅ Correct" : "❌ Incorrect"}
+Phase 6  – Resource Sourcing Awareness  : ${p6Correct ? "✅ Correct" : "❌ Incorrect"}
 Phase 7 Q1 – No translator info shared  : ${p7Q1Selected === 0 ? "✅ Correct" : "❌ Incorrect"}
 Phase 7 Q2 – Timestamp format C1        : ${p7Q2Selected === 1 ? "✅ Correct" : "❌ Incorrect"}
 Phase 7 Q3 – Origin+Language+Context    : ${p7Q3Selected === 0 ? "✅ Correct" : "❌ Incorrect"}
 Phase 7 Q4 – Final handover for C2      : ${p7Q4Selected === 0 ? "✅ Correct" : "❌ Incorrect"}`;
 
             const templateParams = {
-                to_name:         userName,
-                to_email:        userEmail,
-                score:           `${finalScore}%`,
-                result_status:   resultStatus,
+                to_name: userName,
+                to_email: userEmail,
+                score: `${finalScore}%`,
+                result_status: resultStatus,
                 correct_answers: `${correctCount} out of 11`,
-                time_taken:      timeTakenStr,
+                time_taken: timeTakenStr,
                 phase_breakdown: phaseBreakdown
             };
 
