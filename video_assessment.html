@@ -182,7 +182,8 @@
         .table-container {
             overflow-x: auto;
             overflow-y: auto;
-            max-height: 65vh; /* Keep table within view */
+            max-height: 65vh;
+            /* Keep table within view */
             border-radius: 8px;
             border: 2px solid var(--border);
             margin-bottom: 2rem;
@@ -244,7 +245,7 @@
             box-shadow: inset 0 0 0 2px var(--primary);
             background: rgba(37, 99, 235, 0.02);
         }
-        
+
         .resizable-image-wrapper {
             resize: both;
             overflow: hidden;
@@ -260,14 +261,14 @@
             position: relative;
             cursor: zoom-in;
             background: #f8fafc;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             transition: border-color 0.2s;
         }
 
         .resizable-image-wrapper:hover {
             border-color: var(--primary);
         }
-        
+
         .resizable-image-wrapper img {
             width: 100%;
             height: 100%;
@@ -275,6 +276,7 @@
             display: block;
             pointer-events: none;
         }
+
         .image-delete-btn {
             position: absolute;
             top: 5px;
@@ -293,7 +295,7 @@
             z-index: 10;
             transition: background 0.2s;
         }
-        
+
         .btn-secondary:hover {
             background: rgba(0, 0, 0, 0.1);
             color: var(--text-dark);
@@ -312,7 +314,7 @@
         }
 
         .format-btn:hover {
-            background: rgba(0,0,0,0.05);
+            background: rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
         }
 
@@ -355,19 +357,19 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 9999;
             cursor: zoom-out;
         }
-        
+
         .image-overlay img {
             max-width: 90%;
             max-height: 90%;
             border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
         .btn {
@@ -439,23 +441,35 @@
                     <div class="video-section">
                         <h3 style="margin-bottom: 1rem;">Reference Video</h3>
                         <div class="video-sticky-container">
-                            <video id="mainVideoPlayer" controls preload="none" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); background: #000;" src=""></video>
+                            <video id="mainVideoPlayer" controls preload="none"
+                                style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); background: #000;"
+                                src=""></video>
                         </div>
                     </div>
 
                     <!-- Right Side: Table and Questions -->
                     <div class="table-section">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                             <h3 style="margin: 0;">Translation Data</h3>
-                            
+
                             <!-- Formatting Toolbar -->
-                            <div class="formatting-toolbar" style="display: flex; gap: 0.25rem; background: var(--sidebar-bg); padding: 0.25rem 0.5rem; border-radius: 8px; border: 1px solid var(--border);">
-                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('bold')" title="Bold"><i class="fas fa-bold"></i></button>
-                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('italic')" title="Italic"><i class="fas fa-italic"></i></button>
-                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('underline')" title="Underline"><i class="fas fa-underline"></i></button>
+                            <div class="formatting-toolbar"
+                                style="display: flex; gap: 0.25rem; background: var(--sidebar-bg); padding: 0.25rem 0.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()"
+                                    onclick="formatText('bold')" title="Bold"><i class="fas fa-bold"></i></button>
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()"
+                                    onclick="formatText('italic')" title="Italic"><i class="fas fa-italic"></i></button>
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()"
+                                    onclick="formatText('underline')" title="Underline"><i
+                                        class="fas fa-underline"></i></button>
                                 <div style="width: 1px; background: var(--border); margin: 0 4px;"></div>
-                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('hiliteColor', 'yellow')" title="Highlight Yellow" style="color: #eab308;"><i class="fas fa-highlighter"></i></button>
-                                <button type="button" class="format-btn" onmousedown="event.preventDefault()" onclick="formatText('hiliteColor', 'transparent')" title="Remove Highlight"><i class="fas fa-eraser"></i></button>
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()"
+                                    onclick="formatText('hiliteColor', 'yellow')" title="Highlight Yellow"
+                                    style="color: #eab308;"><i class="fas fa-highlighter"></i></button>
+                                <button type="button" class="format-btn" onmousedown="event.preventDefault()"
+                                    onclick="formatText('hiliteColor', 'transparent')" title="Remove Highlight"><i
+                                        class="fas fa-eraser"></i></button>
                             </div>
                         </div>
 
@@ -475,14 +489,18 @@
                             </table>
                         </div>
 
-                        <button class="btn" style="background: var(--secondary); margin-bottom: 2.5rem; width: auto; display: inline-flex;" onclick="addNewRow('')">
+                        <button class="btn"
+                            style="background: var(--secondary); margin-bottom: 2.5rem; width: auto; display: inline-flex;"
+                            onclick="addNewRow('')">
                             <i class="fas fa-plus"></i> Add Row for more OSTs
                         </button>
 
                         <!-- Extra Questions -->
-                        <h3 style="margin-bottom: 1rem; padding-top: 2rem; border-top: 1px solid var(--border);">Additional Questions</h3>
+                        <h3 style="margin-bottom: 1rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                            Additional Questions</h3>
                         <div class="form-group">
-                            <label for="difficultyLevel">How would you rate the difficulty of translating this specific video?
+                            <label for="difficultyLevel">How would you rate the difficulty of translating this specific
+                                video?
                                 <span style="color:red">*</span></label>
                             <input type="text" id="difficultyLevel" placeholder="e.g. Easy, Medium, Hard" required>
                         </div>
@@ -518,13 +536,13 @@
 
         // Initialize the split layout with the video and first row
         const mainVideoPlayer = document.getElementById('mainVideoPlayer');
-        
+
         let rowIndex = 0;
-        
+
         if (segments.length > 0) {
             mainVideoPlayer.src = `assessment_video.mp4#t=${segments[0].start},${segments[0].end}`;
             // Use the requested default format for the first row
-            addNewRow("00.00.00 - 00.01.00"); 
+            addNewRow("00.00.00 - 00.01.00");
         } else {
             addNewRow("00.00.00 - 00.01.00");
         }
@@ -538,14 +556,14 @@
                 const startH = match[4];
                 const startM = match[5];
                 const startS = match[6];
-                
+
                 let h = parseInt(startH, 10);
                 let m = parseInt(startM, 10) + 1;
                 let s = parseInt(startS, 10);
-                
+
                 if (m >= 60) { m -= 60; h += 1; }
                 const pad = (n) => String(n).padStart(2, '0');
-                
+
                 return `${startH}.${startM}.${startS} - ${pad(h)}.${pad(m)}.${pad(s)}`;
             }
             return "00.00.00 - 00.01.00"; // Fallback
@@ -553,7 +571,7 @@
 
         function addNewRow(defaultTimestamp = "") {
             const tbody = document.getElementById('tableBody');
-            
+
             // If no explicit timestamp is passed (e.g. from the 'Add Row' button), auto-increment based on the last row
             if (!defaultTimestamp) {
                 const rows = tbody.querySelectorAll('tr');
@@ -734,10 +752,10 @@
 
                 const ostEl = tr.cells[1].querySelector('.editable-cell');
                 const notesEl = tr.cells[2].querySelector('.editable-cell');
-                
+
                 const ostVal = ostEl ? ostEl.innerHTML : "";
                 const notesVal = notesEl ? notesEl.innerHTML : "";
-                
+
                 tableData.push({
                     timestamp: timestampText,
                     ost: ostVal,
@@ -803,7 +821,7 @@
 
             // Google Apps Script Web App URL
             // Must use google-sheets/video-assessment-logger.gs deployed from the target Google Sheet.
-            const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyl95kpoYBWRhXT3_UMgeVbVHm8SgFetUy2oMdxfqKrPfHW48inCtT_q9KdRm_YRu3LFA/exec";
+            const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx5AjfUFq7S9cTfJQK3-a2ItOjo0C9-tjmz8boDNUOZKZxV4ZBvxY61SeI5ahzb8-K07w/exec";
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
@@ -847,46 +865,46 @@
         // Handle Image Pasting in ContentEditable Cells
         document.addEventListener('paste', function (e) {
             const target = e.target;
-            
+
             // Check if we are pasting into one of our editable cells
             if (target && target.classList && target.classList.contains('editable-cell')) {
                 const items = (e.clipboardData || window.clipboardData).items;
-                
+
                 for (let i = 0; i < items.length; i++) {
                     const item = items[i];
                     // If the pasted item is an image
                     if (item.kind === 'file' && item.type.startsWith('image/')) {
                         e.preventDefault(); // Prevent default paste behavior
-                        
+
                         const blob = item.getAsFile();
                         const reader = new FileReader();
-                        
+
                         reader.onload = function (event) {
                             const wrapper = document.createElement('div');
                             wrapper.className = 'resizable-image-wrapper';
                             wrapper.contentEditable = "false";
-                            
+
                             const img = document.createElement('img');
                             img.src = event.target.result;
                             wrapper.appendChild(img);
-                            
+
                             const deleteBtn = document.createElement('button');
                             deleteBtn.className = 'image-delete-btn';
                             deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
                             deleteBtn.title = 'Remove Image';
                             wrapper.appendChild(deleteBtn);
-                            
+
                             // Insert the image at the current cursor position
                             const selection = window.getSelection();
                             if (selection.rangeCount > 0) {
                                 const range = selection.getRangeAt(0);
                                 range.deleteContents();
                                 range.insertNode(wrapper);
-                                
+
                                 // Add a space/break after the image so user can keep typing
                                 const br = document.createElement('br');
                                 range.insertNode(br);
-                                
+
                                 // Move cursor after the inserted elements
                                 range.setStartAfter(br);
                                 range.setEndAfter(br);
@@ -897,7 +915,7 @@
                                 target.appendChild(document.createElement('br'));
                             }
                         };
-                        
+
                         reader.readAsDataURL(blob);
                         return; // Stop after first image to prevent duplicate firing
                     }
@@ -945,20 +963,20 @@
                 const file = files[i];
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         const wrapper = document.createElement('div');
                         wrapper.className = 'resizable-image-wrapper';
                         wrapper.contentEditable = "false";
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         wrapper.appendChild(img);
-                        
+
                         const deleteBtn = document.createElement('button');
                         deleteBtn.className = 'image-delete-btn';
                         deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
                         deleteBtn.title = 'Remove Image';
                         wrapper.appendChild(deleteBtn);
-                        
+
                         target.appendChild(wrapper);
                         target.appendChild(document.createElement('br'));
                     };
@@ -969,7 +987,7 @@
         }
 
         // Handle Click to Enlarge Images OR Delete
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const deleteBtn = e.target.closest('.image-delete-btn');
             if (deleteBtn) {
                 const wrapper = deleteBtn.closest('.resizable-image-wrapper');
