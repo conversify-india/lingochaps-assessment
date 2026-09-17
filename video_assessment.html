@@ -778,10 +778,10 @@
                 return;
             }
 
-            // Gather table data
+            // Gather table data & verify screenshot presence per timestamp
             const tableData = [];
-            // We'll also extract the first row's answers directly for the spreadsheet columns
             let firstOst = "";
+            let rowsWithScreenshot = 0;
 
             const rows = document.getElementById('tableBody').querySelectorAll('tr');
             rows.forEach((tr, index) => {
@@ -791,9 +791,16 @@
                 const ostEl = tr.cells[1].querySelector('.editable-cell');
                 const ostVal = ostEl ? ostEl.innerHTML : "";
 
+                // Check if an uploaded/pasted screenshot image exists in this row's OST cell
+                const hasScreenshot = ostEl ? (ostEl.querySelector('img') !== null) : false;
+                if (hasScreenshot) {
+                    rowsWithScreenshot++;
+                }
+
                 tableData.push({
                     timestamp: timestampText,
                     ost: ostVal,
+                    hasScreenshot: hasScreenshot,
                     notes: ""
                 });
 
@@ -802,21 +809,26 @@
                 }
             });
 
-            // --- Auto Verification Logic ---
-            let score = 0;
-            let maxScore = answerKey.requiredOstPhrases.length;
-
-            // Combine all rows into one giant string for robust matching (in case they split rows differently)
+            // --- Auto Verification Logic (50% OST Text + 50% Timestamp Screenshots) ---
+            // 1. OST Text Accuracy (Weight: 50%)
+            let matchedTextCount = 0;
+            const maxTextPhrases = answerKey.requiredOstPhrases.length;
             let combinedOst = tableData.map(row => cleanText(row.ost)).join(" ");
 
-            // Check OST phrases
             answerKey.requiredOstPhrases.forEach(phrase => {
                 if (combinedOst.includes(cleanText(phrase))) {
-                    score++;
+                    matchedTextCount++;
                 }
             });
 
-            const finalScorePercentage = Math.round((score / maxScore) * 100);
+            const textScorePct = maxTextPhrases > 0 ? (matchedTextCount / maxTextPhrases) * 50 : 0;
+
+            // 2. Screenshot Attachment (Weight: 50%)
+            const totalRows = rows.length;
+            const screenshotScorePct = totalRows > 0 ? (rowsWithScreenshot / totalRows) * 50 : 0;
+
+            // 3. Combined Total Score (100%)
+            const finalScorePercentage = Math.round(textScorePct + screenshotScorePct);
 
             // Calculate time taken
             const timeTakenSeconds = (2 * 60 * 60) - totalSeconds;
@@ -857,27 +869,40 @@
                 },
                 body: JSON.stringify(payload)
             }).then(() => {
-                showSuccessMessage(finalScorePercentage);
+                showSuccessMessage(finalScorePercentage, Math.round(textScorePct), Math.round(screenshotScorePct), rowsWithScreenshot, totalRows);
             }).catch(error => {
                 console.error("Error submitting to Google Sheets:", error);
                 alert("Could not confirm Google Sheets sync. If results are missing, contact your administrator.");
-                showSuccessMessage(finalScorePercentage);
+                showSuccessMessage(finalScorePercentage, Math.round(textScorePct), Math.round(screenshotScorePct), rowsWithScreenshot, totalRows);
             });
 
         }
 
-        function showSuccessMessage(scorePercentage) {
+        function showSuccessMessage(scorePercentage, textScore, screenshotScore, rowsWithImg, totalRowsCount) {
             document.getElementById('assessmentForm').style.display = 'none';
 
-            // Update success message to show the auto-score
+            // Update success message to show the auto-score & breakdown
             const successDiv = document.getElementById('successMessage');
             successDiv.innerHTML = `
                 <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #166534;"></i>
                 <h2>Assessment Submitted Successfully!</h2>
                 
-                <div style="margin: 2rem auto; padding: 2rem; background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 16px; max-width: 400px;">
+                <div style="margin: 2rem auto; padding: 2rem; background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 16px; max-width: 440px;">
                     <p style="font-size: 1.1rem; color: #166534; font-weight: 600; margin-bottom: 0.5rem;">Translation Auto-Score</p>
                     <div style="font-size: 3.5rem; font-weight: 800; color: #15803d;">${scorePercentage}%</div>
+                    <div style="margin-top: 1rem; text-align: left; background: #ffffff; padding: 0.85rem 1.1rem; border-radius: 8px; border: 1px solid #dcfce7; font-size: 0.9rem; color: #334155;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+                            <span><i class="fas fa-spell-check" style="color: #2563eb;"></i> OST Text Accuracy (50%):</span>
+                            <strong>${textScore} / 50%</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span><i class="fas fa-image" style="color: #10b981;"></i> Timestamp Screenshots (50%):</span>
+                            <strong>${screenshotScore} / 50%</strong>
+                        </div>
+                        <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 0.4rem;">
+                            Screenshots attached: <strong>${rowsWithImg} / ${totalRowsCount}</strong> timestamp rows.
+                        </div>
+                    </div>
                 </div>
 
                 <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
