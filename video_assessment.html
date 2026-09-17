@@ -423,8 +423,26 @@
         <div id="assessmentForm" class="card">
             <h1>Translation Task</h1>
             <p class="description">
-                Please review the clip below and provide the original text
-                (OST), and any relevant notes in the table. You have exactly 2 hours to complete this task.
+
+                <b>Purpose:</b> This test measures how quickly and accurately you can capture on-screen text with exact
+                timestamps, so the translator can work directly from your log. Treat this as a timed exercise — the
+                project has a fixed deadline and requires buffer time for review.
+                <br></br>
+                <b>Step 1 — Watch the video</b>
+                Play through the video, adjust playback speed as per requirement and identify every instance of
+                on-screen text: Signage, labels, watermarks, or
+                any other visible text.
+                <br></br>
+
+                <b>Step 2 — Log each instance
+                </b>
+                For every text appearance, record:
+
+                Timestamp — the exact second the text appears (HH:MM:SS)
+                Text — the text exactly as it appears on screen. Do not skip any text, however brief or minor it may
+                seem. <br></br>
+                <b>Reminder: Work quickly, but accuracy comes first. Aim to finish early enough to leave buffer time for
+                    review and corrections.</b>
             </p>
 
             <div class="form-group">
@@ -444,6 +462,22 @@
                             <video id="mainVideoPlayer" controls preload="none"
                                 style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); background: #000;"
                                 src=""></video>
+                            <div style="margin-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; background: #1e293b; padding: 0.5rem 0.85rem; border-radius: 8px; color: #fff; font-size: 0.85rem;">
+                                <span style="font-weight: 500; display: flex; align-items: center; gap: 0.4rem;">
+                                    <i class="fas fa-tachometer-alt"></i> Playback Speed
+                                </span>
+                                <select id="playbackSpeedSelect" onchange="changePlaybackSpeed(this.value)" style="padding: 0.25rem 0.5rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: #334155; color: #fff; font-weight: 600; cursor: pointer; outline: none;">
+                                    <option value="0.1">0.1x (Ultra Slow)</option>
+                                    <option value="0.2">0.2x (Very Slow)</option>
+                                    <option value="0.25">0.25x</option>
+                                    <option value="0.5">0.5x</option>
+                                    <option value="0.75">0.75x</option>
+                                    <option value="1" selected>1.0x (Normal)</option>
+                                    <option value="1.25">1.25x</option>
+                                    <option value="1.5">1.5x</option>
+                                    <option value="2">2.0x</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -477,9 +511,8 @@
                             <table id="translationTable">
                                 <thead>
                                     <tr>
-                                        <th style="width: 20%">Timestamp</th>
-                                        <th style="width: 45%">OST</th>
-                                        <th style="width: 30%">Notes</th>
+                                        <th style="width: 25%">Timestamp</th>
+                                        <th style="width: 70%">OST</th>
                                         <th style="width: 5%"></th>
                                     </tr>
                                 </thead>
@@ -536,6 +569,21 @@
 
         // Initialize the split layout with the video and first row
         const mainVideoPlayer = document.getElementById('mainVideoPlayer');
+
+        function changePlaybackSpeed(speed) {
+            if (mainVideoPlayer) {
+                mainVideoPlayer.playbackRate = parseFloat(speed);
+            }
+        }
+
+        if (mainVideoPlayer) {
+            mainVideoPlayer.addEventListener('play', function () {
+                const speedSelect = document.getElementById('playbackSpeedSelect');
+                if (speedSelect) {
+                    mainVideoPlayer.playbackRate = parseFloat(speedSelect.value);
+                }
+            });
+        }
 
         let rowIndex = 0;
 
@@ -596,15 +644,6 @@
                         <label style="cursor: pointer; font-size: 0.8rem; color: var(--primary); font-weight: 500; background: rgba(37, 99, 235, 0.1); padding: 4px 8px; border-radius: 4px; transition: background 0.2s;">
                             <i class="fas fa-upload"></i> Upload
                             <input type="file" multiple accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'ost_${rowIndex}')">
-                        </label>
-                    </div>
-                </td>
-                <td style="vertical-align: top; position: relative;">
-                    <div class="editable-cell" id="notes_${rowIndex}" contenteditable="true" data-placeholder="Any notes, paste, or drop images..." style="padding-bottom: 30px;"></div>
-                    <div style="position: absolute; bottom: 8px; right: 12px;">
-                        <label style="cursor: pointer; font-size: 0.8rem; color: var(--primary); font-weight: 500; background: rgba(37, 99, 235, 0.1); padding: 4px 8px; border-radius: 4px; transition: background 0.2s;">
-                            <i class="fas fa-upload"></i> Upload
-                            <input type="file" multiple accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'notes_${rowIndex}')">
                         </label>
                     </div>
                 </td>
@@ -743,7 +782,6 @@
             const tableData = [];
             // We'll also extract the first row's answers directly for the spreadsheet columns
             let firstOst = "";
-            let firstNotes = "";
 
             const rows = document.getElementById('tableBody').querySelectorAll('tr');
             rows.forEach((tr, index) => {
@@ -751,41 +789,29 @@
                 const timestampText = timestampCell ? timestampCell.innerText.trim() : "";
 
                 const ostEl = tr.cells[1].querySelector('.editable-cell');
-                const notesEl = tr.cells[2].querySelector('.editable-cell');
-
                 const ostVal = ostEl ? ostEl.innerHTML : "";
-                const notesVal = notesEl ? notesEl.innerHTML : "";
 
                 tableData.push({
                     timestamp: timestampText,
                     ost: ostVal,
-                    notes: notesVal
+                    notes: ""
                 });
 
                 if (index === 0) {
                     firstOst = ostVal;
-                    firstNotes = notesVal;
                 }
             });
 
             // --- Auto Verification Logic ---
             let score = 0;
-            let maxScore = answerKey.requiredOstPhrases.length + answerKey.requiredNotesPhrases.length;
+            let maxScore = answerKey.requiredOstPhrases.length;
 
             // Combine all rows into one giant string for robust matching (in case they split rows differently)
             let combinedOst = tableData.map(row => cleanText(row.ost)).join(" ");
-            let combinedNotes = tableData.map(row => cleanText(row.notes)).join(" ");
 
             // Check OST phrases
             answerKey.requiredOstPhrases.forEach(phrase => {
                 if (combinedOst.includes(cleanText(phrase))) {
-                    score++;
-                }
-            });
-
-            // Check Notes phrases
-            answerKey.requiredNotesPhrases.forEach(phrase => {
-                if (combinedNotes.includes(cleanText(phrase))) {
                     score++;
                 }
             });
@@ -806,7 +832,7 @@
                 timeTaken: timeTakenString,
                 autoScore: `${finalScorePercentage}%`,
                 ostAnswer: firstOst,
-                notesAnswer: firstNotes,
+                notesAnswer: "",
                 translations: JSON.stringify(tableData)
             };
 
